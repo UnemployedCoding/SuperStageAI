@@ -3,11 +3,23 @@ import { Check, Zap, Wand2, Image as ImageIcon, ArrowRight, Sparkles } from "luc
 import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import { StagingApp } from "@/components/StagingApp";
-import emptyLiving from "@/assets/empty-living.jpg";
-import stagedLiving from "@/assets/staged-living.jpg";
-import stagedBedroom from "@/assets/staged-bedroom.jpg";
-import stagedDining from "@/assets/staged-dining.jpg";
-import stagedOffice from "@/assets/staged-office.jpg";
+import { BeforeAfter } from "@/components/BeforeAfter";
+
+const IA = "https://www.iacrea.com";
+const HERO_BEFORE = `${IA}/home_exemples/salon_vide.jpg`;
+const HERO_AFTER = `${IA}/home_exemples/projection_virtuelle_salon.jpg`;
+
+const EXAMPLES = [
+  { label: "Furnish an empty space", before: `${IA}/home_exemples/salon_vide.jpg`, after: `${IA}/home_exemples/projection_virtuelle_salon.jpg` },
+  { label: "Refresh a furnished room", before: `${IA}/more_examples/salon2_orig.jpeg`, after: `${IA}/more_examples/salon2_iacrea.png` },
+  { label: "Renovate and furnish", before: `${IA}/more_examples/salon3_orig.jpeg`, after: `${IA}/more_examples/salon3_iacrea.png` },
+  { label: "Modify an exterior", before: `${IA}/gallery/exterieur/old_terrace_needs_to_be_redesigned.jpg`, after: `${IA}/gallery/exterieur/exterior_terrace_redesigned_iacrea.jpg` },
+  { label: "Get a blue sky", before: `${IA}/gallery/exterieur/exterior-home-staging-before.jpg`, after: `${IA}/gallery/exterieur/exterior-design-with-ai.jpg` },
+  { label: "Create a kitchen or a bathroom", before: `${IA}/more_examples/cuisine_orig.jpg`, after: `${IA}/more_examples/cuisine_iacrea.jpg` },
+  { label: "Improve the quality of an image", before: `${IA}/more_examples/salon_orig.jpeg`, after: `${IA}/more_examples/salon_iacrea.jpg` },
+  { label: "Remove your logo", before: `${IA}/more_examples/salon_orig2.png`, after: `${IA}/more_examples/salon_iacrea2.jpg` },
+  { label: "Declutter a space", before: `${IA}/more_examples/chambre_orig.jpg`, after: `${IA}/more_examples/chambre_iacrea.jpg` },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
