@@ -77,14 +77,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Virtual Staging AI — Stage rooms in seconds" },
+      { name: "description", content: "Upload a photo of an empty room and our AI adds beautiful furniture in seconds. Try it free, no signup required." },
+      { property: "og:title", content: "Virtual Staging AI — Stage rooms in seconds" },
+      { property: "og:description", content: "AI-powered virtual staging for real estate listings. Upload a photo, pick a style, get a staged room in seconds." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
