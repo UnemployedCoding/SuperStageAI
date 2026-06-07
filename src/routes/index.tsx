@@ -3,11 +3,23 @@ import { Check, Zap, Wand2, Image as ImageIcon, ArrowRight, Sparkles } from "luc
 import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import { StagingApp } from "@/components/StagingApp";
-import emptyLiving from "@/assets/empty-living.jpg";
-import stagedLiving from "@/assets/staged-living.jpg";
-import stagedBedroom from "@/assets/staged-bedroom.jpg";
-import stagedDining from "@/assets/staged-dining.jpg";
-import stagedOffice from "@/assets/staged-office.jpg";
+import { BeforeAfter } from "@/components/BeforeAfter";
+
+const IA = "https://www.iacrea.com";
+const HERO_BEFORE = `${IA}/home_exemples/salon_vide.jpg`;
+const HERO_AFTER = `${IA}/home_exemples/projection_virtuelle_salon.jpg`;
+
+const EXAMPLES = [
+  { label: "Furnish an empty space", before: `${IA}/home_exemples/salon_vide.jpg`, after: `${IA}/home_exemples/projection_virtuelle_salon.jpg` },
+  { label: "Refresh a furnished room", before: `${IA}/more_examples/salon2_orig.jpeg`, after: `${IA}/more_examples/salon2_iacrea.png` },
+  { label: "Renovate and furnish", before: `${IA}/more_examples/salon3_orig.jpeg`, after: `${IA}/more_examples/salon3_iacrea.png` },
+  { label: "Modify an exterior", before: `${IA}/gallery/exterieur/old_terrace_needs_to_be_redesigned.jpg`, after: `${IA}/gallery/exterieur/exterior_terrace_redesigned_iacrea.jpg` },
+  { label: "Get a blue sky", before: `${IA}/gallery/exterieur/exterior-home-staging-before.jpg`, after: `${IA}/gallery/exterieur/exterior-design-with-ai.jpg` },
+  { label: "Create a kitchen or a bathroom", before: `${IA}/more_examples/cuisine_orig.jpg`, after: `${IA}/more_examples/cuisine_iacrea.jpg` },
+  { label: "Improve the quality of an image", before: `${IA}/more_examples/salon_orig.jpeg`, after: `${IA}/more_examples/salon_iacrea.jpg` },
+  { label: "Remove your logo", before: `${IA}/more_examples/salon_orig2.png`, after: `${IA}/more_examples/salon_iacrea2.jpg` },
+  { label: "Declutter a space", before: `${IA}/more_examples/chambre_orig.jpg`, after: `${IA}/more_examples/chambre_iacrea.jpg` },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -97,11 +109,11 @@ function Hero() {
           <div className="overflow-hidden rounded-2xl border border-border shadow-2xl">
             <div className="grid grid-cols-2">
               <div className="relative">
-                <img src={emptyLiving} alt="Empty room before staging" width={1280} height={832} className="h-full w-full object-cover" />
+                <img src={HERO_BEFORE} alt="Empty room before staging" className="h-full w-full object-cover" />
                 <span className="absolute left-3 top-3 rounded bg-black/60 px-2 py-1 text-xs font-medium text-white">Before</span>
               </div>
               <div className="relative">
-                <img src={stagedLiving} alt="Staged room after AI" width={1280} height={832} className="h-full w-full object-cover" />
+                <img src={HERO_AFTER} alt="Staged room after AI" className="h-full w-full object-cover" />
                 <span className="absolute right-3 top-3 rounded bg-primary px-2 py-1 text-xs font-medium text-primary-foreground">After</span>
               </div>
             </div>
@@ -129,30 +141,20 @@ function FeatureBar() {
 }
 
 function Gallery() {
-  const items = [
-    { src: stagedLiving, label: "Modern Living Room" },
-    { src: stagedBedroom, label: "Scandinavian Bedroom" },
-    { src: stagedDining, label: "Industrial Dining" },
-    { src: stagedOffice, label: "Mid-Century Office" },
-  ];
   return (
     <section id="gallery" className="py-20">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-10 max-w-2xl">
-          <span className="text-sm font-medium text-primary">Gallery</span>
-          <h2 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">
-            See the transformation
+        <div className="mb-12 text-center">
+          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+            Virtual Home Staging Examples
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Real estate photos furnished by our AI in seconds across dozens of design styles.
+            Drag the slider on any image to reveal the AI transformation.
           </p>
         </div>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {items.map((it) => (
-            <figure key={it.label} className="group overflow-hidden rounded-xl border border-border bg-card">
-              <img src={it.src} alt={it.label} loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-105" />
-              <figcaption className="border-t border-border px-4 py-3 text-sm text-muted-foreground">{it.label}</figcaption>
-            </figure>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {EXAMPLES.map((e) => (
+            <BeforeAfter key={e.label} before={e.before} after={e.after} label={e.label} />
           ))}
         </div>
       </div>
