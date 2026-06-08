@@ -47,13 +47,15 @@ export default function BeforeAfterSlider({
   const selectedStyleRef = useRef(selectedStyle);
   const onRoomChangeRef = useRef(onRoomChange);
   const onStyleChangeRef = useRef(onStyleChange);
+  const showStagedRef = useRef(showStaged);
 
   useEffect(() => {
     selectedRoomRef.current = selectedRoom;
     selectedStyleRef.current = selectedStyle;
     onRoomChangeRef.current = onRoomChange;
     onStyleChangeRef.current = onStyleChange;
-  }, [selectedRoom, selectedStyle, onRoomChange, onStyleChange]);
+    showStagedRef.current = showStaged;
+  }, [selectedRoom, selectedStyle, onRoomChange, onStyleChange, showStaged]);
 
   // Auto-cycle room type and design style with synchronized progress indicators
   useEffect(() => {
@@ -68,25 +70,27 @@ export default function BeforeAfterSlider({
         const nextProgress = prev + increment;
         if (nextProgress >= 100) {
           // Trigger transition when progress reaches 100%
-          setShowStaged((currentStaged) => {
-            const nextStaged = !currentStaged;
-            if (nextStaged) {
-              // Fading in Staged image: transition to next design style
-              if (styles && selectedStyleRef.current && onStyleChangeRef.current) {
-                const currentIndex = styles.findIndex((s) => s.id === selectedStyleRef.current);
-                const nextIndex = (currentIndex + 1) % styles.length;
-                onStyleChangeRef.current(styles[nextIndex].id);
-              }
-            } else {
-              // Fading in Empty image: transition to next room type
-              if (rooms && selectedRoomRef.current && onRoomChangeRef.current) {
-                const currentIndex = rooms.findIndex((r) => r.id === selectedRoomRef.current);
-                const nextIndex = (currentIndex + 1) % rooms.length;
-                onRoomChangeRef.current(rooms[nextIndex].id);
-              }
+          const currentStaged = showStagedRef.current;
+          const nextStaged = !currentStaged;
+
+          // Update child state safely in the asynchronous interval callback
+          setShowStaged(nextStaged);
+
+          if (nextStaged) {
+            // Fading in Staged image: transition to next design style
+            if (styles && selectedStyleRef.current && onStyleChangeRef.current) {
+              const currentIndex = styles.findIndex((s) => s.id === selectedStyleRef.current);
+              const nextIndex = (currentIndex + 1) % styles.length;
+              onStyleChangeRef.current(styles[nextIndex].id);
             }
-            return nextStaged;
-          });
+          } else {
+            // Fading in Empty image: transition to next room type
+            if (rooms && selectedRoomRef.current && onRoomChangeRef.current) {
+              const currentIndex = rooms.findIndex((r) => r.id === selectedRoomRef.current);
+              const nextIndex = (currentIndex + 1) % rooms.length;
+              onRoomChangeRef.current(rooms[nextIndex].id);
+            }
+          }
           return 0;
         }
         return nextProgress;
@@ -138,7 +142,7 @@ export default function BeforeAfterSlider({
           <div className="relative inline-flex items-center rounded-full bg-slate-200/60 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-md border border-slate-100/30 cursor-pointer overflow-hidden transition-colors hover:bg-slate-200/80">
             {/* Progress Bar Background */}
             <div
-              className="absolute inset-y-0 left-0 bg-white/90 -z-10 transition-all duration-100 ease-linear"
+              className="absolute inset-y-0 left-0 bg-white/90 z-0 transition-all duration-100 ease-linear"
               style={{ width: `${progress}%` }}
             />
             <select
@@ -174,7 +178,7 @@ export default function BeforeAfterSlider({
           <div className="relative inline-flex items-center rounded-full bg-slate-200/60 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-md border border-slate-100/30 cursor-pointer overflow-hidden transition-colors hover:bg-slate-200/80">
             {/* Progress Bar Background */}
             <div
-              className="absolute inset-y-0 left-0 bg-white/90 -z-10 transition-all duration-100 ease-linear"
+              className="absolute inset-y-0 left-0 bg-white/90 z-0 transition-all duration-100 ease-linear"
               style={{ width: `${progress}%` }}
             />
             <select
