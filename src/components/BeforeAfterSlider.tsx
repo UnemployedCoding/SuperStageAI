@@ -1,133 +1,149 @@
 "use client";
 
-import React, { useState, useRef, useEffect, MouseEvent, TouchEvent } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
   afterImage: string;
-  beforeLabel?: string;
-  afterLabel?: string;
-  aspectRatio?: string; // e.g. "aspect-video", "aspect-[4/3]", etc.
+  aspectRatio?: string;
+  interval?: number; // auto-fade timer interval, default 3000ms
+  
+  // Optional Dropdown Selectors (for interactive hero)
+  selectedRoom?: string;
+  selectedStyle?: string;
+  rooms?: Array<{ id: string; name: string }>;
+  styles?: Array<{ id: string; name: string }>;
+  onRoomChange?: (room: string) => void;
+  onStyleChange?: (style: string) => void;
+
+  // Optional Static Labels (for gallery cards)
+  staticRoomLabel?: string;
+  staticStyleLabel?: string;
 }
 
 export default function BeforeAfterSlider({
   beforeImage,
   afterImage,
-  beforeLabel = "Before",
-  afterLabel = "After",
   aspectRatio = "aspect-video",
+  interval = 3000,
+  selectedRoom,
+  selectedStyle,
+  rooms,
+  styles,
+  onRoomChange,
+  onStyleChange,
+  staticRoomLabel,
+  staticStyleLabel,
 }: BeforeAfterSliderProps) {
-  const [sliderPosition, setSliderPosition] = useState(50); // percentage (0 - 100)
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMove = (clientX: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPosition(percentage);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
-    handleMove(e.clientX);
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!isDragging) return;
-    if (e.touches.length > 0) {
-      handleMove(e.touches[0].clientX);
-    }
-  };
-
-  const handleMouseDown = () => setIsDragging(true);
-  const handleTouchStart = () => setIsDragging(true);
+  const [showStaged, setShowStaged] = useState(false);
 
   useEffect(() => {
-    const handleMouseUp = () => setIsDragging(false);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("touchend", handleMouseUp);
+    const timer = setInterval(() => {
+      setShowStaged((prev) => !prev);
+    }, interval);
 
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchend", handleMouseUp);
-    };
-  }, []);
+    return () => clearInterval(timer);
+  }, [interval, beforeImage, afterImage]);
 
-  // Set position on click
-  const handleContainerClick = (e: React.MouseEvent) => {
-    if (isDragging) return;
-    handleMove(e.clientX);
-  };
+  // Reset staging state to empty when the images change (e.g. user selects a new room)
+  useEffect(() => {
+    setShowStaged(false);
+  }, [beforeImage, afterImage]);
+
+  const hasDropdowns = onRoomChange && onStyleChange && rooms && styles && selectedRoom && selectedStyle;
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative w-full select-none overflow-hidden rounded-2xl shadow-xl border border-slate-100 ${aspectRatio} group cursor-ew-resize`}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
-      onClick={handleContainerClick}
-    >
-      {/* After Image (Full background) */}
-      <div className="absolute inset-0 w-full h-full">
-        <Image
-          src={afterImage}
-          alt="Staged space"
-          fill
-          sizes="(max-width: 1200px) 100vw, 1200px"
-          priority
-          className="object-cover pointer-events-none"
-        />
-        <div className="absolute right-4 bottom-4 glass px-3 py-1.5 rounded-full text-xs font-semibold text-slate-800 shadow-sm pointer-events-none transition-opacity duration-300 opacity-90 group-hover:opacity-100 uppercase tracking-wider">
-          {afterLabel}
-        </div>
-      </div>
-
-      {/* Before Image (Clipped Overlay) */}
-      <div
-        className="absolute inset-0 w-full h-full overflow-hidden transition-all duration-75"
-        style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
-      >
+    <div className={`relative w-full overflow-hidden rounded-2xl shadow-xl border border-slate-100 ${aspectRatio}`}>
+      
+      {/* Before Image (Base layer) */}
+      <div className="absolute inset-0">
         <Image
           src={beforeImage}
           alt="Empty space"
           fill
           sizes="(max-width: 1200px) 100vw, 1200px"
           priority
-          className="object-cover pointer-events-none"
+          className="object-cover"
         />
-        <div className="absolute left-4 bottom-4 glass px-3 py-1.5 rounded-full text-xs font-semibold text-slate-800 shadow-sm pointer-events-none transition-opacity duration-300 opacity-90 group-hover:opacity-100 uppercase tracking-wider">
-          {beforeLabel}
-        </div>
       </div>
 
-      {/* Slider Line / Handle */}
+      {/* After Image (Fade overlay) */}
       <div
-        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize shadow-lg flex items-center justify-center transition-all duration-75"
-        style={{ left: `${sliderPosition}%` }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
+        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+          showStaged ? "opacity-100" : "opacity-0"
+        }`}
       >
-        {/* Drag Button */}
-        <div className="absolute w-10 h-10 bg-white hover:bg-slate-50 border border-slate-200 rounded-full shadow-2xl flex items-center justify-center cursor-ew-resize transition-all duration-150 transform hover:scale-105 active:scale-95">
-          <svg
-            className="w-5 h-5 text-slate-600 flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={3}
-              d="M8 9l-3 3 3 3m8-6l3 3-3 3"
-            />
-          </svg>
-        </div>
+        <Image
+          src={afterImage}
+          alt="Staged space"
+          fill
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          priority
+          className="object-cover"
+        />
       </div>
+
+      {/* Top-left: Staging status indicator badge */}
+      <div className="absolute top-4 left-4 z-10 rounded-full bg-slate-900/60 backdrop-blur-md px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white select-none pointer-events-none transition-colors duration-300">
+        {showStaged ? "Staged" : "Empty"}
+      </div>
+
+      {/* Bottom-left: Room Selector (or Static Room Label) */}
+      <div className="absolute bottom-4 left-4 z-20">
+        {hasDropdowns ? (
+          <div className="relative inline-flex items-center rounded-full bg-white/95 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-md border border-slate-100/50 hover:bg-white transition-colors cursor-pointer">
+            <select
+              value={selectedRoom}
+              onChange={(e) => onRoomChange(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            >
+              {rooms.map((room) => (
+                <option key={room.id} value={room.id}>
+                  {room.name}
+                </option>
+              ))}
+            </select>
+            <span className="mr-1.5">{rooms.find((r) => r.id === selectedRoom)?.name}</span>
+            <ChevronDown className="h-4 w-4 text-slate-500" />
+          </div>
+        ) : (
+          staticRoomLabel && (
+            <div className="rounded-full bg-slate-900/60 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-white uppercase tracking-wider select-none pointer-events-none">
+              {staticRoomLabel}
+            </div>
+          )
+        )}
+      </div>
+
+      {/* Bottom-right: Style Selector (or Static Style Label) */}
+      <div className="absolute bottom-4 right-4 z-20">
+        {hasDropdowns ? (
+          <div className="relative inline-flex items-center rounded-full bg-white/95 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-md border border-slate-100/50 hover:bg-white transition-colors cursor-pointer">
+            <select
+              value={selectedStyle}
+              onChange={(e) => onStyleChange(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            >
+              {styles.map((style) => (
+                <option key={style.id} value={style.id}>
+                  {style.name}
+                </option>
+              ))}
+            </select>
+            <span className="mr-1.5">{styles.find((s) => s.id === selectedStyle)?.name}</span>
+            <ChevronDown className="h-4 w-4 text-slate-500" />
+          </div>
+        ) : (
+          staticStyleLabel && (
+            <div className="rounded-full bg-white/90 backdrop-blur-sm px-4 py-1.5 text-xs font-bold text-slate-800 uppercase tracking-wider select-none pointer-events-none">
+              {staticStyleLabel}
+            </div>
+          )
+        )}
+      </div>
+
     </div>
   );
 }

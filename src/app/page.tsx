@@ -101,19 +101,6 @@ export default function Home() {
   const [selectedStyle, setSelectedStyle] = useState("modern");
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  // Auto cycling rooms every 6 seconds to show dynamic staging (only if user hasn't interacted)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSelectedRoom((prev) => {
-        const currentIndex = ROOM_TYPES.findIndex((r) => r.id === prev);
-        const nextIndex = (currentIndex + 1) % ROOM_TYPES.length;
-        return ROOM_TYPES[nextIndex].id;
-      });
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const toggleFaq = (index: number) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
@@ -182,49 +169,18 @@ export default function Home() {
             </div>
 
             {/* Right: Interactive room demo carousel */}
-            <div className="lg:col-span-7 space-y-4">
-              {/* Room selector buttons */}
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                {ROOM_TYPES.map((room) => (
-                  <button
-                    key={room.id}
-                    onClick={() => setSelectedRoom(room.id)}
-                    className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all shadow-sm ${
-                      selectedRoom === room.id
-                        ? "bg-primary text-white"
-                        : "bg-white text-slate-600 hover:bg-slate-50 hover:text-primary border border-slate-200"
-                    }`}
-                  >
-                    {room.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* Slider image component */}
+            <div className="lg:col-span-7">
               <BeforeAfterSlider
                 beforeImage={getImagePath(selectedRoom, selectedStyle, true)}
                 afterImage={getImagePath(selectedRoom, selectedStyle)}
-                beforeLabel="Original Empty Room"
-                afterLabel={`${STYLES.find((s) => s.id === selectedStyle)?.name || ""} Style`}
                 aspectRatio="aspect-[4/3] sm:aspect-video"
+                selectedRoom={selectedRoom}
+                selectedStyle={selectedStyle}
+                rooms={ROOM_TYPES}
+                styles={STYLES}
+                onRoomChange={setSelectedRoom}
+                onStyleChange={setSelectedStyle}
               />
-
-              {/* Style selector slider tabs */}
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start pt-1">
-                {STYLES.map((style) => (
-                  <button
-                    key={style.id}
-                    onClick={() => setSelectedStyle(style.id)}
-                    className={`rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all border ${
-                      selectedStyle === style.id
-                        ? "bg-accent/10 text-accent border-accent/25"
-                        : "bg-white text-slate-500 hover:bg-slate-50 border-slate-200"
-                    }`}
-                  >
-                    {style.name}
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         </div>

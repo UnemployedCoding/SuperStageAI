@@ -216,9 +216,9 @@ export default function GalleryPage() {
                 <BeforeAfterSlider
                   beforeImage={`/demo/${item.room}-empty.${item.beforeHash}.webp`}
                   afterImage={`/demo/${item.room}-${item.style}.${item.afterHash}.webp`}
-                  beforeLabel="Empty"
-                  afterLabel={item.styleName}
                   aspectRatio="aspect-[4/3]"
+                  staticRoomLabel={item.roomName}
+                  staticStyleLabel={item.styleName}
                 />
                 <div className="flex items-center justify-between px-1">
                   <div>
