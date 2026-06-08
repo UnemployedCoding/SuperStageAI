@@ -30,6 +30,7 @@ const ROOM_TYPES = [
 ];
 
 const STYLES = [
+  { id: "original", name: "Original" },
   { id: "modern", name: "Modern" },
   { id: "scandinavian", name: "Scandinavian" },
   { id: "luxury", name: "Luxury" },
@@ -91,14 +92,14 @@ const ASSET_HASHES: Record<string, string> = {
 };
 
 function getImagePath(room: string, style: string, isEmpty = false): string {
-  const key = isEmpty ? `${room}-empty` : `${room}-${style}`;
+  const key = isEmpty || style === "original" ? `${room}-empty` : `${room}-${style}`;
   const hash = ASSET_HASHES[key];
   return `/demo/${key}.${hash}.webp`;
 }
 
 export default function Home() {
   const [selectedRoom, setSelectedRoom] = useState("living-room");
-  const [selectedStyle, setSelectedStyle] = useState("modern");
+  const [selectedStyle, setSelectedStyle] = useState("original");
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {

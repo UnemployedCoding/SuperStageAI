@@ -37,25 +37,26 @@ export default function BeforeAfterSlider({
   staticRoomLabel,
   staticStyleLabel,
 }: BeforeAfterSliderProps) {
-  const [showStaged, setShowStaged] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const hasDropdowns = onRoomChange && onStyleChange && rooms && styles && selectedRoom && selectedStyle;
+
+  // Derive staging overlay visibility directly from selection
+  const showStaged = selectedStyle !== "original";
 
   // Track latest reactive values via refs to avoid re-creating the auto-cycle interval
   const selectedRoomRef = useRef(selectedRoom);
   const selectedStyleRef = useRef(selectedStyle);
   const onRoomChangeRef = useRef(onRoomChange);
   const onStyleChangeRef = useRef(onStyleChange);
-  const showStagedRef = useRef(showStaged);
+  const lastStagedStyleIndexRef = useRef(0);
 
   useEffect(() => {
     selectedRoomRef.current = selectedRoom;
     selectedStyleRef.current = selectedStyle;
     onRoomChangeRef.current = onRoomChange;
     onStyleChangeRef.current = onStyleChange;
-    showStagedRef.current = showStaged;
-  }, [selectedRoom, selectedStyle, onRoomChange, onStyleChange, showStaged]);
+  }, [selectedRoom, selectedStyle, onRoomChange, onStyleChange]);
 
   // Auto-cycle room type and design style with synchronized progress indicators
   useEffect(() => {
@@ -69,22 +70,21 @@ export default function BeforeAfterSlider({
       setProgress((prev) => {
         const nextProgress = prev + increment;
         if (nextProgress >= 100) {
-          // Trigger transition when progress reaches 100%
-          const currentStaged = showStagedRef.current;
-          const nextStaged = !currentStaged;
+          const currentStyle = selectedStyleRef.current;
 
-          // Update child state safely in the asynchronous interval callback
-          setShowStaged(nextStaged);
-
-          if (nextStaged) {
-            // Fading in Staged image: transition to next design style
-            if (styles && selectedStyleRef.current && onStyleChangeRef.current) {
-              const currentIndex = styles.findIndex((s) => s.id === selectedStyleRef.current);
-              const nextIndex = (currentIndex + 1) % styles.length;
-              onStyleChangeRef.current(styles[nextIndex].id);
+          if (currentStyle === "original") {
+            // Transition from empty to staged: cycle to the next staged style (excluding 'original')
+            if (styles && onStyleChangeRef.current) {
+              const stagedStyles = styles.filter((s) => s.id !== "original");
+              const nextStagedIndex = (lastStagedStyleIndexRef.current + 1) % stagedStyles.length;
+              lastStagedStyleIndexRef.current = nextStagedIndex;
+              onStyleChangeRef.current(stagedStyles[nextStagedIndex].id);
             }
           } else {
-            // Fading in Empty image: transition to next room type
+            // Transition from staged to empty: set style to 'original' AND cycle room type to the next room!
+            if (onStyleChangeRef.current) {
+              onStyleChangeRef.current("original");
+            }
             if (rooms && selectedRoomRef.current && onRoomChangeRef.current) {
               const currentIndex = rooms.findIndex((r) => r.id === selectedRoomRef.current);
               const nextIndex = (currentIndex + 1) % rooms.length;
@@ -150,7 +150,6 @@ export default function BeforeAfterSlider({
               onChange={(e) => {
                 onRoomChange(e.target.value);
                 setProgress(0);
-                setShowStaged(false);
               }}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
             >
@@ -186,7 +185,13 @@ export default function BeforeAfterSlider({
               onChange={(e) => {
                 onStyleChange(e.target.value);
                 setProgress(0);
-                setShowStaged(false);
+                if (e.target.value !== "original" && styles) {
+                  const stagedStyles = styles.filter((s) => s.id !== "original");
+                  const idx = stagedStyles.findIndex((s) => s.id === e.target.value);
+                  if (idx !== -1) {
+                    lastStagedStyleIndexRef.current = idx;
+                  }
+                }
               }}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
             >
