@@ -218,11 +218,29 @@ export default function Home() {
       <section className="w-full bg-slate-50/50 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Featured In & Trusted By</p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-50 grayscale hover:opacity-75 transition-opacity">
-            <Image src="/demo/housingwire.png" alt="Housing Wire" width={140} height={35} className="h-8 object-contain" />
-            <Image src="/demo/realtor-magazine.png" alt="Realtor Magazine" width={140} height={35} className="h-8 object-contain" />
-            <Image src="/demo/inman.png" alt="Inman" width={120} height={30} className="h-6 object-contain" />
-            <Image src="/demo/techcrunch.png" alt="Tech Crunch" width={140} height={35} className="h-7 object-contain" />
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-40 grayscale hover:opacity-75 transition-opacity">
+            {/* Housing Wire SVG */}
+            <svg viewBox="0 0 160 30" className="h-7 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="22" className="font-sans font-black tracking-tight" fontSize="18" fontStyle="italic">HOUSINGWIRE</text>
+            </svg>
+            
+            {/* Realtor Magazine SVG */}
+            <svg viewBox="0 0 140 35" className="h-8 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="14" className="font-sans font-black tracking-wider" fontSize="12">REALTOR®</text>
+              <text x="0" y="27" className="font-sans font-medium tracking-widest text-slate-500" fontSize="9">MAGAZINE</text>
+            </svg>
+            
+            {/* Inman SVG */}
+            <svg viewBox="0 0 100 30" className="h-6 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="22" className="font-serif font-bold italic" fontSize="22" letterSpacing="-0.5">inman</text>
+            </svg>
+            
+            {/* TechCrunch SVG */}
+            <svg viewBox="0 0 140 35" className="h-7 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="5" width="24" height="24" fill="#00a86b" rx="2" />
+              <text x="4" y="23" className="font-sans font-black" fontSize="16" fill="white">TC</text>
+              <text x="30" y="23" className="font-sans font-black tracking-tight" fontSize="17" fill="currentColor">TechCrunch</text>
+            </svg>
           </div>
         </div>
       </section>
