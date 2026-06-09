@@ -17,7 +17,7 @@ import {
   Smile,
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
-import GallerySection from "@/components/GallerySection";
+import Uploader from "@/components/Uploader";
 
 // Room & Style assets mapping
 const ROOM_TYPES = [
@@ -187,8 +187,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* New Gallery Section */}
-      <GallerySection />
+      {/* ── Uploader Section ── */}
+      <section className="bg-white py-12 lg:py-20 border-b border-slate-100">
+        <Uploader />
+      </section>
 
       {/* 2. Stats Bar Section */}
       <section className="w-full bg-white border-y border-slate-100 py-10">
