@@ -33,10 +33,23 @@ export default function Uploader() {
   
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingTime, setLoadingTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [stagedResult, setStagedResult] = useState<string | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setLoadingTime((prev) => prev + 1);
+      }, 1000);
+    } else {
+      setLoadingTime(0);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -88,12 +101,19 @@ export default function Uploader() {
       }
 
       // Check if it's a mock fallback from our API
-      if (data.staged_image_url?.includes("undefined")) {
-        // Fallback for missing mock hashes
-        setStagedResult("/demo/living-room-modern.c831fe91.webp");
-      } else {
-        setStagedResult(data.staged_image_url);
-      }
+      const finalUrl = data.staged_image_url?.includes("undefined")
+        ? "/demo/living-room-modern.c831fe91.webp"
+        : data.staged_image_url;
+
+      // Preload the image so the transition to the slider is instant and flicker-free
+      await new Promise<void>((resolve) => {
+        const img = new window.Image();
+        img.src = finalUrl;
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
+
+      setStagedResult(finalUrl);
       
     } catch (err: any) {
       console.error(err);
@@ -143,9 +163,24 @@ export default function Uploader() {
             // ─── Preview Original View ───
             <div className="relative w-full rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200" style={{ aspectRatio: "4/3" }}>
               <Image src={previewUrl} alt="Original uploaded image" fill className="object-cover" />
+              {isLoading && (
+                <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-30 transition-all duration-300">
+                  <div className="bg-slate-900/80 p-6 rounded-2xl border border-white/10 shadow-2xl flex flex-col items-center max-w-xs text-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-400 mb-3" />
+                    <p className="font-semibold text-base mb-1">Staging your room...</p>
+                    <p className="text-xs text-slate-300">
+                      AI is furnishing your space. This can take up to 30 seconds.
+                    </p>
+                    <div className="mt-4 px-3 py-1 bg-white/10 rounded-full text-xs font-mono text-blue-300">
+                      {loadingTime}s
+                    </div>
+                  </div>
+                </div>
+              )}
               <button 
                 onClick={reset}
-                className="absolute top-4 right-4 z-40 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 backdrop-blur-md transition-all"
+                disabled={isLoading ? true : undefined}
+                className="absolute top-4 right-4 z-40 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 backdrop-blur-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -194,7 +229,7 @@ export default function Uploader() {
                   <select
                     value={roomType}
                     onChange={(e) => setRoomType(e.target.value)}
-                    disabled={isLoading || stagedResult !== null}
+                    disabled={(isLoading || stagedResult !== null) ? true : undefined}
                     className="w-full appearance-none bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60"
                   >
                     {ROOM_TYPES.map(rt => (
@@ -214,7 +249,7 @@ export default function Uploader() {
                   {STYLES.map(s => (
                     <button
                       key={s.id}
-                      disabled={isLoading || stagedResult !== null}
+                      disabled={(isLoading || stagedResult !== null) ? true : undefined}
                       onClick={() => setStyle(s.id)}
                       className={`px-3 py-2 text-xs font-semibold rounded-lg transition-all border ${
                         style === s.id
@@ -239,8 +274,8 @@ export default function Uploader() {
           {/* Submit Button */}
           <button
             onClick={stagedResult ? reset : handleStageRoom}
-            disabled={!selectedFile || isLoading}
-            className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-white transition-all shadow-lg ${
+            disabled={(!selectedFile || isLoading) ? true : undefined}
+            className={`w-full flex items-center justify-center py-4 rounded-xl font-bold text-white transition-all shadow-lg ${
               !selectedFile 
                 ? "bg-slate-300 cursor-not-allowed shadow-none" 
                 : stagedResult
@@ -249,20 +284,25 @@ export default function Uploader() {
             }`}
           >
             {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Staging your room...
-              </>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Staging your room...</span>
+                </div>
+                <span className="text-xs text-white/80 mt-1 font-normal tracking-wide">
+                  This can take up to 30 seconds ({loadingTime}s)
+                </span>
+              </div>
             ) : stagedResult ? (
-              <>
+              <div className="flex items-center gap-2">
                 <ImageIcon className="w-5 h-5" />
-                Stage Another Photo
-              </>
+                <span>Stage Another Photo</span>
+              </div>
             ) : (
-              <>
+              <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5" />
-                Stage Room Now
-              </>
+                <span>Stage Room Now</span>
+              </div>
             )}
           </button>
         </div>

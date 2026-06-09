@@ -81,11 +81,11 @@ export default function GalleryDragSlider({
         setSliderPos(getPos(e.touches[0].clientX));
       }}
     >
-      {/* ── After (staged) image — full background ── */}
+      {/* ── Before (empty) image — full background ── */}
       <div className="absolute inset-0 pointer-events-none">
         <Image
-          src={afterImage}
-          alt="Staged room"
+          src={beforeImage}
+          alt="Original empty room"
           fill
           sizes="(max-width: 1200px) 100vw, 1200px"
           priority
@@ -93,14 +93,14 @@ export default function GalleryDragSlider({
         />
       </div>
 
-      {/* ── Before (empty) image — clipped to left by clip-path ── */}
+      {/* ── After (staged) image — clipped to right by clip-path ── */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
+        style={{ clipPath: `inset(0 0 0 ${sliderPos}%)` }}
       >
         <Image
-          src={beforeImage}
-          alt="Original empty room"
+          src={afterImage}
+          alt="Staged room"
           fill
           sizes="(max-width: 1200px) 100vw, 1200px"
           priority

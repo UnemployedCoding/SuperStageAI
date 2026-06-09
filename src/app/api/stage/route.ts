@@ -35,6 +35,11 @@ export async function POST(request: Request) {
     mnmlFormData.append("image", image);
     mnmlFormData.append("room_type", roomType || "living_room");
     mnmlFormData.append("style", style || "modern");
+    
+    // Explicitly pass a prompt since MNML API sometimes ignores the style parameter
+    const formattedRoom = (roomType || "living_room").replace("-", " ");
+    const formattedStyle = style || "modern";
+    mnmlFormData.append("prompt", `Beautiful ${formattedStyle} interior design of a ${formattedRoom}`);
 
     const response = await fetch("https://api.mnmlai.dev/v1/interior", {
       method: "POST",
@@ -59,7 +64,33 @@ export async function POST(request: Request) {
     
     // The exact response structure depends on MNML.ai, but typically includes a result URL
     // e.g., { result: "https://..." } or { image_url: "https://..." }
-    const stagedImageUrl = data.result || data.image_url || data.url;
+    let stagedImageUrl = data.result || data.image_url || data.url;
+
+    if (data.id && !stagedImageUrl) {
+      // Poll for status
+      let isProcessing = true;
+      let attempts = 0;
+      while (isProcessing && attempts < 30) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const statusRes = await fetch(`https://api.mnmlai.dev/v1/status/${data.id}`, {
+          headers: { "Authorization": `Bearer ${apiKey}` }
+        });
+        if (!statusRes.ok) continue;
+        
+        const statusData = await statusRes.json();
+        if (statusData.status === "success" && statusData.message && statusData.message.length > 0) {
+          stagedImageUrl = statusData.message[0];
+          isProcessing = false;
+        } else if (statusData.status === "failed" || statusData.status === "error") {
+          return NextResponse.json({ error: "Image generation failed" }, { status: 500 });
+        }
+        attempts++;
+      }
+    }
+
+    if (!stagedImageUrl) {
+      return NextResponse.json({ error: "Failed to retrieve generated image" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true, staged_image_url: stagedImageUrl });
   } catch (error) {
