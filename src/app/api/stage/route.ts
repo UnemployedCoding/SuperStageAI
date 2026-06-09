@@ -29,19 +29,30 @@ export async function POST(request: Request) {
       });
     }
 
-    // Prepare request for MNML.ai
-    // According to typical MNML.ai API structure, it requires a POST with FormData
+    // Prepare request for MNML.ai ArchDiffusion v4.3
     const mnmlFormData = new FormData();
     mnmlFormData.append("image", image);
-    mnmlFormData.append("room_type", roomType || "living_room");
-    mnmlFormData.append("style", style || "modern");
     
-    // Explicitly pass a prompt since MNML API sometimes ignores the style parameter
-    const formattedRoom = (roomType || "living_room").replace("-", " ");
+    const formattedRoom = (roomType || "living-room").replace("-", " ");
     const formattedStyle = style || "modern";
-    mnmlFormData.append("prompt", `Beautiful ${formattedStyle} interior design of a ${formattedRoom}`);
+    
+    let roomStyle = "Modern interior";
+    if (formattedStyle === "modern") {
+      roomStyle = "Modern interior";
+    } else {
+      roomStyle = formattedStyle.charAt(0).toUpperCase() + formattedStyle.slice(1);
+    }
 
-    const response = await fetch("https://api.mnmlai.dev/v1/interior", {
+    // ArchDiffusion v4.3 requires the "prompt" parameter
+    mnmlFormData.append("prompt", `Beautiful ${roomStyle} design of a ${formattedRoom}`);
+    mnmlFormData.append("expert_name", "interior");
+    mnmlFormData.append("room_type", formattedRoom);
+    mnmlFormData.append("room_style", roomStyle);
+    mnmlFormData.append("geometry", "precise");
+    mnmlFormData.append("render_style", "photoreal");
+    mnmlFormData.append("furnishing_level", "full");
+
+    const response = await fetch("https://api.mnmlai.dev/v1/archDiffusion-v43", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
@@ -78,7 +89,8 @@ export async function POST(request: Request) {
         if (!statusRes.ok) continue;
         
         const statusData = await statusRes.json();
-        if (statusData.status === "success" && statusData.message && statusData.message.length > 0) {
+        const isSuccess = statusData.status === "success" || statusData.status === "succeeded";
+        if (isSuccess && statusData.message && statusData.message.length > 0) {
           stagedImageUrl = statusData.message[0];
           isProcessing = false;
         } else if (statusData.status === "failed" || statusData.status === "error") {
