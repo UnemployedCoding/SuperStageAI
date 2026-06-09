@@ -21,6 +21,10 @@ interface BeforeAfterSliderProps {
   // Optional Static Labels (for gallery cards)
   staticRoomLabel?: string;
   staticStyleLabel?: string;
+  
+  // Customization
+  hideControls?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function BeforeAfterSlider({
@@ -36,6 +40,8 @@ export default function BeforeAfterSlider({
   onStyleChange,
   staticRoomLabel,
   staticStyleLabel,
+  hideControls = false,
+  children,
 }: BeforeAfterSliderProps) {
   const [progress, setProgress] = useState(0);
 
@@ -50,6 +56,7 @@ export default function BeforeAfterSlider({
   const onRoomChangeRef = useRef(onRoomChange);
   const onStyleChangeRef = useRef(onStyleChange);
   const lastStagedStyleIndexRef = useRef(0);
+  const lastResetTimeRef = useRef(Date.now());
 
   useEffect(() => {
     selectedRoomRef.current = selectedRoom;
@@ -64,37 +71,40 @@ export default function BeforeAfterSlider({
 
     const tickTime = 50; // ms for ultra-smooth progress rendering
     const duration = 4000; // 4 seconds per transition phase (empty -> staged or staged -> empty)
-    const increment = (tickTime / duration) * 100;
 
     const timer = setInterval(() => {
-      setProgress((prev) => {
-        const nextProgress = prev + increment;
-        if (nextProgress >= 100) {
-          const currentStyle = selectedStyleRef.current;
+      const now = Date.now();
+      const elapsed = now - lastResetTimeRef.current;
+      const nextProgress = (elapsed / duration) * 100;
 
-          if (currentStyle === "original") {
-            // Transition from empty to staged: cycle to the next staged style (excluding 'original')
-            if (styles && onStyleChangeRef.current) {
-              const stagedStyles = styles.filter((s) => s.id !== "original");
-              const nextStagedIndex = (lastStagedStyleIndexRef.current + 1) % stagedStyles.length;
-              lastStagedStyleIndexRef.current = nextStagedIndex;
-              onStyleChangeRef.current(stagedStyles[nextStagedIndex].id);
-            }
-          } else {
-            // Transition from staged to empty: set style to 'original' AND cycle room type to the next room!
-            if (onStyleChangeRef.current) {
-              onStyleChangeRef.current("original");
-            }
-            if (rooms && selectedRoomRef.current && onRoomChangeRef.current) {
-              const currentIndex = rooms.findIndex((r) => r.id === selectedRoomRef.current);
-              const nextIndex = (currentIndex + 1) % rooms.length;
-              onRoomChangeRef.current(rooms[nextIndex].id);
-            }
+      if (nextProgress >= 100) {
+        lastResetTimeRef.current = now;
+        setProgress(0);
+
+        const currentStyle = selectedStyleRef.current;
+
+        if (currentStyle === "original") {
+          // Transition from empty to staged: cycle to the next staged style (excluding 'original')
+          if (styles && onStyleChangeRef.current) {
+            const stagedStyles = styles.filter((s) => s.id !== "original");
+            const nextStagedIndex = (lastStagedStyleIndexRef.current + 1) % stagedStyles.length;
+            lastStagedStyleIndexRef.current = nextStagedIndex;
+            onStyleChangeRef.current(stagedStyles[nextStagedIndex].id);
           }
-          return 0;
+        } else {
+          // Transition from staged to empty: set style to 'original' AND cycle room type to the next room!
+          if (onStyleChangeRef.current) {
+            onStyleChangeRef.current("original");
+          }
+          if (rooms && selectedRoomRef.current && onRoomChangeRef.current) {
+            const currentIndex = rooms.findIndex((r) => r.id === selectedRoomRef.current);
+            const nextIndex = (currentIndex + 1) % rooms.length;
+            onRoomChangeRef.current(rooms[nextIndex].id);
+          }
         }
-        return nextProgress;
-      });
+      } else {
+        setProgress(nextProgress);
+      }
     }, tickTime);
 
     return () => clearInterval(timer);
@@ -136,8 +146,10 @@ export default function BeforeAfterSlider({
         {showStaged ? "Staged" : "Empty"}
       </div>
 
-      {/* Bottom-left: Room Selector (or Static Room Label) */}
-      <div className="absolute bottom-4 left-4 z-20">
+      {!hideControls && (
+        <>
+          {/* Bottom-left: Room Selector (or Static Room Label) */}
+          <div className="absolute bottom-4 left-4 z-20">
         {hasDropdowns ? (
           <div className="relative inline-flex items-center rounded-full bg-slate-200/60 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-md border border-slate-100/30 cursor-pointer overflow-hidden transition-colors hover:bg-slate-200/80">
             {/* Progress Bar Background */}
@@ -149,6 +161,7 @@ export default function BeforeAfterSlider({
               value={selectedRoom}
               onChange={(e) => {
                 onRoomChange(e.target.value);
+                lastResetTimeRef.current = Date.now();
                 setProgress(0);
               }}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
@@ -184,6 +197,7 @@ export default function BeforeAfterSlider({
               value={selectedStyle}
               onChange={(e) => {
                 onStyleChange(e.target.value);
+                lastResetTimeRef.current = Date.now();
                 setProgress(0);
                 if (e.target.value !== "original" && styles) {
                   const stagedStyles = styles.filter((s) => s.id !== "original");
@@ -212,6 +226,11 @@ export default function BeforeAfterSlider({
           )
         )}
       </div>
+        </>
+      )}
+
+      {/* Custom Overlays */}
+      {children}
 
     </div>
   );

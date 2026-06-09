@@ -12,12 +12,12 @@ import {
   Sparkles,
   Clock,
   Coins,
-  Shield,
   TrendingUp,
   Percent,
   Smile,
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import GallerySection from "@/components/GallerySection";
 
 // Room & Style assets mapping
 const ROOM_TYPES = [
@@ -186,6 +186,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* New Gallery Section */}
+      <GallerySection />
 
       {/* 2. Stats Bar Section */}
       <section className="w-full bg-white border-y border-slate-100 py-10">
