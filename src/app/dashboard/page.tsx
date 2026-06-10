@@ -297,7 +297,7 @@ export default function DashboardPage() {
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Result</label>
                 {stagedUrl && previewUrl ? (
                   <div className="space-y-3">
-                    <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+                    <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-sm aspect-video">
                       <GalleryDragSlider beforeImage={previewUrl} afterImage={stagedUrl} />
                     </div>
                     <a
