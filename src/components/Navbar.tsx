@@ -1,13 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X, Rocket } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, Rocket, LayoutDashboard } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<{ email?: string } | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -58,18 +76,38 @@ export default function Navbar() {
 
           {/* Desktop CTA actions */}
           <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-sm font-medium text-slate-700 hover:text-accent px-3 py-2 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/login?signUp=true"
-              className="rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-5 py-2.5 shadow-lg shadow-orange-500/15 transition-all hover:shadow-orange-500/25 active:scale-[0.98]"
-            >
-              Get Started
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-accent px-3 py-2 transition-colors"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="rounded-full border border-slate-200 text-slate-600 hover:text-red-500 hover:border-red-200 text-sm font-semibold px-5 py-2.5 transition-all"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-slate-700 hover:text-accent px-3 py-2 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/login?signUp=true"
+                  className="rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-5 py-2.5 shadow-lg shadow-orange-500/15 transition-all hover:shadow-orange-500/25 active:scale-[0.98]"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}

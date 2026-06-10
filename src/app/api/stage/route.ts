@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+  // Auth check — only paid users can call this
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await request.formData();
     const image = formData.get("image") as File;
@@ -103,6 +111,15 @@ export async function POST(request: Request) {
     if (!stagedImageUrl) {
       return NextResponse.json({ error: "Failed to retrieve generated image" }, { status: 500 });
     }
+
+    // Save to staging history
+    await supabase.from("stagings").insert({
+      user_id: user.id,
+      before_url: "", // local file — no public URL
+      after_url: stagedImageUrl,
+      room_type: roomType,
+      style,
+    });
 
     return NextResponse.json({ success: true, staged_image_url: stagedImageUrl });
   } catch (error) {
