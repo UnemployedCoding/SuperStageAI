@@ -68,7 +68,7 @@ export default function Navbar() {
               href="/login?signUp=true"
               className="rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-5 py-2.5 shadow-lg shadow-orange-500/15 transition-all hover:shadow-orange-500/25 active:scale-[0.98]"
             >
-              Try For Free
+              Get Started
             </Link>
           </div>
 
@@ -122,7 +122,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex justify-center rounded-lg bg-accent py-2.5 text-base font-semibold text-white shadow-md hover:bg-accent-hover transition-colors"
             >
-              Try For Free
+              Get Started
             </Link>
           </div>
         </div>

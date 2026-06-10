@@ -13,7 +13,7 @@ export default function ApiPage() {
     {
       icon: <Zap className="h-6 w-6 text-accent" />,
       title: "Sub-15s Generation",
-      description: "Engineered for speed. Receive fully furnished staged room outputs via webhook notifications in under 15 seconds.",
+      description: "Engineered for speed. Receive fully furnished staged room outputs via webhook notifications in under 45 seconds.",
     },
     {
       icon: <Code className="h-6 w-6 text-accent" />,

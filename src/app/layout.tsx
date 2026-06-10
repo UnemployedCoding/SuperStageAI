@@ -16,7 +16,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Virtual Staging AI — Stage Empty Rooms in Seconds",
-  description: "Virtual Staging by AI. Try for free and get instant results. Highly realistic furnishings. Developed at Harvard Innovation Lab.",
+  description: "Virtual Staging by AI. Get instant, highly realistic furnished room photos in seconds. Starting at just $16/month. Developed at Harvard Innovation Lab.",
   openGraph: {
     title: "Virtual Staging AI",
     description: "One click virtual staging, powered by AI.",

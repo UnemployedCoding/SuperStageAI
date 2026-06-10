@@ -17,7 +17,6 @@ import {
   Smile,
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
-import Uploader from "@/components/Uploader";
 
 // Room & Style assets mapping
 const ROOM_TYPES = [
@@ -109,7 +108,7 @@ export default function Home() {
   const faqs = [
     {
       q: "How long does virtual staging take?",
-      a: "Our advanced AI stages your images in under 15 seconds. Simply upload, choose a style, and your photo is ready immediately.",
+      a: "Our advanced AI stages your images in under 45 seconds. Simply upload, choose a style, and your photo is ready immediately.",
     },
     {
       q: "Can I remove existing furniture from a photo?",
@@ -125,7 +124,7 @@ export default function Home() {
     },
     {
       q: "Is there a free trial?",
-      a: "Yes! You can upload a photo and preview the virtual staging result completely for free. No credit card or sign up is required to try it out.",
+      a: "We don't offer a free trial, but our plans start from as little as $16/month with no long-term commitment. You can cancel anytime.",
     },
   ];
 
@@ -159,13 +158,13 @@ export default function Home() {
                   href="/login?signUp=true"
                   className="rounded-full bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 shadow-xl shadow-orange-500/20 transition-all hover:shadow-orange-500/30 flex items-center justify-center gap-2 group text-base"
                 >
-                  Upload image for free
-                  <Upload className="h-4.5 w-4.5 transition-transform group-hover:translate-y-[-2px]" />
+                  Get Started
+                  <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
 
               <p className="text-xs text-slate-500 font-medium tracking-wide">
-                NO SIGN UP REQUIRED &bull; NO CREDIT CARD
+                PLANS FROM $16/MONTH &bull; CANCEL ANYTIME
               </p>
             </div>
 
@@ -187,21 +186,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Uploader Section ── */}
-      <section className="bg-white py-12 lg:py-20 border-b border-slate-100">
-        <Uploader />
-      </section>
-
       {/* 2. Stats Bar Section */}
       <section className="w-full bg-white border-y border-slate-100 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-center items-center">
             <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">Under 15s</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-primary">Under 45s</p>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">Turnaround Time</p>
             </div>
             <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">$1 / image</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-primary">&lt;$1 / image</p>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">Average Cost</p>
             </div>
             <div className="space-y-1">
@@ -213,7 +207,7 @@ export default function Home() {
               <p className="text-xs sm:text-sm text-slate-500 font-medium">Realistic Staging</p>
             </div>
             <div className="col-span-2 md:col-span-1 space-y-1 border-t md:border-t-0 pt-4 md:pt-0 border-slate-100">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">10k+</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-primary">1,000+</p>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">Happy Users</p>
             </div>
           </div>
@@ -281,7 +275,7 @@ export default function Home() {
               </span>
               <h3 className="text-xl font-bold text-primary">Faster Listing Speeds</h3>
               <p className="text-sm text-slate-500 leading-relaxed">
-                Upload raw photo listings and receive fully furnished versions in 15 seconds. Stage and list the exact same day.
+                Upload raw photo listings and receive fully furnished versions in under 45 seconds. Stage and list the exact same day.
               </p>
             </div>
             {/* Card 3 */}
@@ -379,7 +373,7 @@ export default function Home() {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-semibold text-primary">Delivery speed</td>
-                  <td className="px-6 py-4 bg-accent/5 font-semibold text-accent">Under 15 seconds</td>
+                  <td className="px-6 py-4 bg-accent/5 font-semibold text-accent">Under 45 seconds</td>
                   <td className="px-6 py-4 text-slate-500">2 - 5 business days</td>
                 </tr>
                 <tr>
@@ -460,7 +454,7 @@ export default function Home() {
             Ready to Stun Your Home Buyers?
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Get instant virtual staging for your listings. Try it completely for free with no credit card required.
+            Get instant virtual staging for your listings. Professional results starting at just $16/month.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
@@ -468,7 +462,7 @@ export default function Home() {
               href="/login?signUp=true"
               className="rounded-full bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 shadow-lg shadow-orange-500/20 transition-all active:scale-[0.98] text-base"
             >
-              Upload image for free
+              Get Started
             </Link>
             <Link
               href="/prices"

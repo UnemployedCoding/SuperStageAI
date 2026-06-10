@@ -122,16 +122,16 @@ function StyleButton({
         "backdrop-blur transition-colors duration-150",
         isSelected
           ? isPlaying
-            ? "bg-white/60 text-slate-900"
-            : "bg-white text-slate-900"
-          : "bg-[#1b2034]/70 text-white hover:bg-white/80 hover:text-slate-900",
+            ? "bg-accent/80 text-white"
+            : "bg-accent text-white"
+          : "bg-slate-800/70 text-white hover:bg-slate-700",
       ].join(" ")}
     >
       {label}
-      {/* Progress fill — matches reference (white/60 overlay fills left→right) */}
+      {/* Progress fill */}
       {isSelected && isPlaying && (
         <span
-          className="absolute left-0 top-0 z-[-1] h-full bg-white/60 transition-none"
+          className="absolute left-0 top-0 z-[-1] h-full bg-white/25 transition-none"
           style={{ width: `${progress}%` }}
         />
       )}
@@ -223,17 +223,17 @@ export default function GalleryPage() {
   };
 
   return (
-    <div className="bg-[#1b2034] min-h-screen text-white">
+    <div className="bg-slate-50 min-h-screen">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
 
         {/* ── Heading ── */}
         <div className="text-center mb-10 space-y-3">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary">
             <b>See the Transformation:</b>{" "}Before &amp; After Gallery
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto">
+          <p className="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto">
             See how Virtual Staging AI transforms unappealing spaces into attractive,{" "}
-            <b className="text-white">listing-ready homes in seconds.</b>
+            <b className="text-slate-800">listing-ready homes in seconds.</b>
           </p>
         </div>
 
@@ -245,8 +245,10 @@ export default function GalleryPage() {
                 key={s.roomId}
                 onClick={() => handleRoomTab(i)}
                 className={[
-                  "whitespace-nowrap rounded-xl border-2 border-[#2e4a8c] px-3 py-2 text-sm font-semibold md:px-6 md:py-3 md:text-base transition-colors",
-                  i === slideIndex ? "bg-white text-[#1b2034]" : "bg-[#2e4a8c] text-white hover:bg-white/20",
+                  "whitespace-nowrap rounded-xl border-2 px-3 py-2 text-sm font-semibold md:px-6 md:py-3 md:text-base transition-colors",
+                  i === slideIndex
+                    ? "border-accent bg-accent text-white shadow-md shadow-orange-500/20"
+                    : "border-slate-200 bg-white text-slate-600 hover:border-accent hover:text-accent",
                 ].join(" ")}
               >
                 {s.label}s
@@ -328,8 +330,8 @@ export default function GalleryPage() {
                     className={[
                       "h-[72px] overflow-hidden rounded-xl border-2 my-2",
                       isActive
-                        ? "border-blue-500 shadow-[0_0_0_8px_rgba(59,130,246,0.15)]"
-                        : "border-slate-600/50 opacity-60 hover:opacity-100 hover:border-slate-400",
+                        ? "border-accent shadow-[0_0_0_8px_rgba(249,115,22,0.15)]"
+                        : "border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400",
                     ].join(" ")}
                   >
                     <Image

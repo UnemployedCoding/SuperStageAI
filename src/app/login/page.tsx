@@ -66,7 +66,7 @@ function LoginContent() {
                 onClick={() => setIsSignUp(!isSignUp)}
                 className="font-bold text-accent hover:text-accent-hover transition-colors"
               >
-                {isSignUp ? "Sign In" : "Sign up for free"}
+                {isSignUp ? "Sign In" : "Create Account"}
               </button>
             </p>
           </div>
