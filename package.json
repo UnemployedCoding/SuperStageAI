@@ -1,5 +1,6 @@
 {
   "name": "superstageai",
+  "description": "A state-of-the-art virtual staging SaaS web application tailored for real estate agents, powered by AI.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
