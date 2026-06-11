@@ -150,21 +150,21 @@ export default function Home() {
                 </span>
               </h1>
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                Upload a picture of an empty room and our AI will add realistic furniture within seconds. Starting at just $16/month.
+                Upload a picture of an empty room and our AI will add realistic furniture within seconds. Starting at just $39/month.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                 <Link
-                  href="/login?signUp=true"
+                  href="/gallery"
                   className="rounded-full bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 shadow-xl shadow-orange-500/20 transition-all hover:shadow-orange-500/30 flex items-center justify-center gap-2 group text-base"
                 >
-                  Get Started
+                  See demo
                   <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
 
-              <p className="text-xs text-slate-500 font-medium tracking-wide">
-                PLANS FROM $16/MONTH &bull; CANCEL ANYTIME
+              <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">
+                PLANS FROM $39/MONTH &bull; CANCEL ANYTIME
               </p>
             </div>
 
@@ -187,60 +187,115 @@ export default function Home() {
       </section>
 
       {/* 2. Stats Bar Section */}
-      <section className="w-full bg-white border-y border-slate-100 py-10">
+      <section className="w-full bg-white border-y border-slate-100 py-16 relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-center items-center">
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">Under 45s</p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">Turnaround Time</p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-0 text-center md:divide-x divide-slate-100">
+            
+            {/* Stat 1 */}
+            <div className="space-y-3 flex flex-col items-center md:px-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-accent">
+                <Clock className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div className="space-y-1">
+                <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
+                  Under 45s
+                </p>
+                <p className="text-sm text-slate-500 font-medium">Turnaround Time</p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">&lt;$1 / image</p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">Average Cost</p>
+
+            {/* Stat 2 */}
+            <div className="space-y-3 flex flex-col items-center md:px-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-accent">
+                <Coins className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div className="space-y-1">
+                <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
+                  <span className="text-accent">&lt;</span>$1 <span className="text-xl">/ img</span>
+                </p>
+                <p className="text-sm text-slate-500 font-medium">Average Cost</p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">50+</p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">Design Styles</p>
+
+            {/* Stat 3 */}
+            <div className="space-y-3 flex flex-col items-center md:px-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-accent">
+                <Sparkles className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div className="space-y-1">
+                <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
+                  50<span className="text-accent">+</span>
+                </p>
+                <p className="text-sm text-slate-500 font-medium">Design Styles</p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">100%</p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">Realistic Staging</p>
+
+            {/* Stat 4 */}
+            <div className="space-y-3 flex flex-col items-center md:px-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-accent">
+                <Percent className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div className="space-y-1">
+                <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
+                  100<span className="text-accent">%</span>
+                </p>
+                <p className="text-sm text-slate-500 font-medium">Realistic Staging</p>
+              </div>
             </div>
-            <div className="col-span-2 md:col-span-1 space-y-1 border-t md:border-t-0 pt-4 md:pt-0 border-slate-100">
-              <p className="text-2xl sm:text-3xl font-extrabold text-primary">1,000+</p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">Happy Users</p>
+
+            {/* Stat 5 */}
+            <div className="col-span-2 md:col-span-1 space-y-3 flex flex-col items-center md:px-4 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-accent">
+                <Smile className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div className="space-y-1">
+                <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
+                  1,000<span className="text-accent">+</span>
+                </p>
+                <p className="text-sm text-slate-500 font-medium">Happy Users</p>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* 3. Press Logos Section */}
-      <section className="w-full bg-slate-50/50 py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Featured In & Trusted By</p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-40 grayscale hover:opacity-75 transition-opacity">
-            {/* Housing Wire SVG */}
-            <svg viewBox="0 0 160 30" className="h-7 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="22" className="font-sans font-black tracking-tight" fontSize="18" fontStyle="italic">HOUSINGWIRE</text>
-            </svg>
+      {/* 3. Agencies Section */}
+      <section className="w-full bg-slate-50 border-y border-slate-100 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-10">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">
+            Trusted by agents from
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 select-none">
+            {/* Ray White style */}
+            <span className="font-sans font-black text-2xl tracking-tighter text-slate-800">
+              Ray White<span className="text-accent">.</span>
+            </span>
             
-            {/* Realtor Magazine SVG */}
-            <svg viewBox="0 0 140 35" className="h-8 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="14" className="font-sans font-black tracking-wider" fontSize="12">REALTOR®</text>
-              <text x="0" y="27" className="font-sans font-medium tracking-widest text-slate-500" fontSize="9">MAGAZINE</text>
-            </svg>
+            {/* McGrath style */}
+            <span className="font-serif font-medium text-3xl tracking-wide text-slate-800">
+              McGrath
+            </span>
             
-            {/* Inman SVG */}
-            <svg viewBox="0 0 100 30" className="h-6 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="22" className="font-serif font-bold italic" fontSize="22" letterSpacing="-0.5">inman</text>
-            </svg>
+            {/* LJ Hooker style */}
+            <span className="font-sans font-extrabold text-2xl italic tracking-tight text-slate-800">
+              LJ Hooker
+            </span>
             
-            {/* TechCrunch SVG */}
-            <svg viewBox="0 0 140 35" className="h-7 text-slate-800 fill-current" xmlns="http://www.w3.org/2000/svg">
-              <rect x="0" y="5" width="24" height="24" fill="#00a86b" rx="2" />
-              <text x="4" y="23" className="font-sans font-black" fontSize="16" fill="white">TC</text>
-              <text x="30" y="23" className="font-sans font-black tracking-tight" fontSize="17" fill="currentColor">TechCrunch</text>
-            </svg>
+            {/* Belle Property style */}
+            <div className="flex flex-col items-center justify-center leading-none">
+              <span className="font-serif font-bold text-[1.6rem] lowercase tracking-wide text-slate-800">
+                belle
+              </span>
+              <span className="font-sans font-bold text-[8px] tracking-[0.35em] text-slate-500 uppercase mt-1">
+                property
+              </span>
+            </div>
+            
+            {/* Barry Plant style */}
+            <span className="font-sans font-bold text-2xl tracking-tight text-slate-800">
+              BarryPlant
+            </span>
           </div>
         </div>
       </section>
