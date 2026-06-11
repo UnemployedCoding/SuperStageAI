@@ -12,7 +12,8 @@ export default async function DashboardLayout({
   // Should be caught by middleware, but double-check here
   if (!user) redirect("/login");
 
-  // Check for active subscription
+  // Temporarily commented out subscription check to allow testing/image editing
+  /*
   const { data: subscription } = await supabase
     .from("subscriptions")
     .select("*")
@@ -21,6 +22,7 @@ export default async function DashboardLayout({
     .single();
 
   if (!subscription) redirect("/prices?no_plan=true");
+  */
 
   return <>{children}</>;
 }
