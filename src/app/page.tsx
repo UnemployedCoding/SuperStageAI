@@ -124,7 +124,7 @@ export default function Home() {
     },
     {
       q: "Is there a free trial?",
-      a: "We don't offer a free trial, but our plans start from as little as $16/month with no long-term commitment. You can cancel anytime.",
+      a: "We don't offer a free trial, but our plans start from as little as $19/month with no long-term commitment. You can cancel anytime.",
     },
   ];
 
@@ -141,17 +141,22 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3.5 py-1.5 text-xs font-semibold text-accent border border-orange-100/50">
                 <Sparkles className="h-3.5 w-3.5 fill-current" />
-                Next Generation Staging AI
+                AI Built for Real Estate
               </div>
               <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-primary leading-[1.15]">
-                Virtual Staging <br />
+                Stop losing buyers to{" "}
                 <span className="bg-gradient-to-r from-accent to-orange-600 bg-clip-text text-transparent">
-                  with one click
+                  empty rooms
                 </span>
               </h1>
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                Upload a picture of an empty room and our AI will add realistic furniture within seconds. Starting at just $39/month.
-              </p>
+              <div className="space-y-4 max-w-lg mx-auto lg:mx-0">
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                  Empty listings get <span className="font-bold text-primary">80% fewer views</span>. Traditional staging costs <span className="font-bold text-primary">$2,000+</span> per room.
+                </p>
+                <p className="text-base sm:text-lg text-slate-800 leading-relaxed font-medium">
+                  <span className="font-display italic text-accent">First impressions, perfected.</span> Our AI is purpose-built for real estate—delivering photo-realistic staged rooms in seconds.
+                </p>
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                 <Link
@@ -162,10 +167,6 @@ export default function Home() {
                   <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
-
-              <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">
-                PLANS FROM $39/MONTH &bull; CANCEL ANYTIME
-              </p>
             </div>
 
             {/* Right: Interactive room demo carousel */}
@@ -340,7 +341,7 @@ export default function Home() {
               </span>
               <h3 className="text-xl font-bold text-primary">Save Thousands of Dollars</h3>
               <p className="text-sm text-slate-500 leading-relaxed">
-                Physical staging can cost upwards of $2,000 per property. Virtual Staging AI stages your entire list starting at just $16.
+                Physical staging can cost upwards of $2,000 per property. SuperStage AI stages your entire list starting at just $19.
               </p>
             </div>
           </div>
@@ -404,7 +405,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-16">
           <div className="max-w-2xl mx-auto space-y-4">
             <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-primary">
-              Virtual Staging AI vs. Traditional Methods
+              SuperStage AI vs. Traditional Methods
             </h2>
             <p className="text-slate-600 text-base">
               A quick look at how automated AI staging outperforms traditional alternatives.
@@ -416,7 +417,7 @@ export default function Home() {
               <thead>
                 <tr className="bg-slate-950 text-white font-bold text-sm">
                   <th className="px-6 py-4">Feature</th>
-                  <th className="px-6 py-4 bg-accent/90">Virtual Staging AI</th>
+                  <th className="px-6 py-4 bg-accent/90">SuperStage AI</th>
                   <th className="px-6 py-4 text-slate-400">Traditional Staging</th>
                 </tr>
               </thead>
@@ -509,7 +510,7 @@ export default function Home() {
             Ready to Stun Your Home Buyers?
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Get instant virtual staging for your listings. Professional results starting at just $16/month.
+            Get instant virtual staging for your listings. Professional results starting at just $19/month.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
@@ -530,7 +531,7 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-6 text-xs sm:text-sm text-slate-400 font-medium pt-4 border-t border-slate-900 max-w-xl mx-auto">
             <div className="flex items-center gap-1.5">
               <Check className="h-4 w-4 text-accent" />
-              15-sec turnaround
+              45-sec turnaround
             </div>
             <div className="flex items-center gap-1.5">
               <Check className="h-4 w-4 text-accent" />

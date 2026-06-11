@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Upload, Sparkles, History, CreditCard, LogOut,
-  Rocket, X, Download, ChevronDown, CheckCircle2
+  X, Download, ChevronDown, CheckCircle2
 } from "lucide-react";
+import LogoIcon from "@/components/LogoIcon";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import GalleryDragSlider from "@/components/GalleryDragSlider";
@@ -149,12 +150,10 @@ export default function DashboardPage() {
       {/* ── Sidebar ── */}
       <aside className="hidden md:flex w-64 flex-col bg-white border-r border-slate-100 px-4 py-6 fixed h-full">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 mb-8 px-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-md shadow-orange-500/20">
-            <Rocket className="h-5 w-5 fill-current" />
-          </span>
+        <Link href="/" className="flex items-center gap-2.5 mb-8 px-2">
+          <LogoIcon size={30} />
           <span className="font-display text-lg font-bold tracking-tight text-primary">
-            VirtualStaging<span className="text-accent">AI</span>
+            SuperStage<span className="text-accent"> AI</span>
           </span>
         </Link>
 
@@ -318,7 +317,7 @@ export default function DashboardPage() {
                         <>
                           <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-accent border-t-transparent" />
                           <p className="text-sm text-slate-400 font-medium">AI is staging your room…</p>
-                          <p className="text-xs text-slate-300">This can take up to 30 seconds</p>
+                          <p className="text-xs text-slate-300">This can take up to 45 seconds</p>
                         </>
                       ) : (
                         <>

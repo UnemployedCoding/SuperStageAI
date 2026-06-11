@@ -154,7 +154,6 @@ export default function GalleryPage() {
   const slide = SLIDES[slideIndex];
   const styleKeys = slide.styles; // e.g. ["modern", "scandinavian", ...]
   const activeStyleKey = styleKeys[styleIndex] ?? styleKeys[0];
-  const activeImageSrc = slide.images[activeStyleKey];
 
   // ── Resume after pause ──
   const resumeAfterDelay = useCallback(() => {
@@ -232,7 +231,7 @@ export default function GalleryPage() {
             <b>See the Transformation:</b>{" "}Before &amp; After Gallery
           </h1>
           <p className="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto">
-            See how Virtual Staging AI transforms unappealing spaces into attractive,{" "}
+            See how SuperStage AI transforms unappealing spaces into attractive,{" "}
             <b className="text-slate-800">listing-ready homes in seconds.</b>
           </p>
         </div>
@@ -272,23 +271,26 @@ export default function GalleryPage() {
 
           {/* Styled image overlay — hidden for 'original', visible for staged styles */}
           <div className="absolute inset-0">
-            {styleKeys.map((styleKey, i) => (
-              <div
-                key={styleKey}
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  i === styleIndex && styleKey !== "original" ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <Image
-                  src={slide.images[styleKey]}
-                  alt={`${slide.label} ${styleKey}`}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 1080px"
-                  className="object-cover"
-                  priority={i === 0}
-                />
-              </div>
-            ))}
+            {styleKeys.map((styleKey, i) => {
+              if (styleKey === "original") return null;
+              return (
+                <div
+                  key={styleKey}
+                  className={`absolute inset-0 transition-opacity duration-500 ${
+                    i === styleIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <Image
+                    src={slide.images[styleKey]}
+                    alt={`${slide.label} ${styleKey}`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1080px"
+                    className="object-cover"
+                    priority={i === 0}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Room label badge (top-left) */}

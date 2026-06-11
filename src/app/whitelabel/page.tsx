@@ -13,7 +13,7 @@ export default function WhitelabelPage() {
     {
       icon: <Shield className="h-6 w-6 text-accent" />,
       title: "Fully White-Labeled",
-      description: "No mention of Virtual Staging AI anywhere. Completely branded client logins, dashboards, and downloads.",
+      description: "No mention of SuperStage AI anywhere. Completely branded client logins, dashboards, and downloads.",
     },
     {
       icon: <Cpu className="h-6 w-6 text-accent" />,

@@ -126,7 +126,7 @@ export default function GallerySection() {
             <span className="font-normal">Before &amp; After Gallery</span>
           </h2>
           <p className="text-slate-300 text-base sm:text-lg">
-            See how Virtual Staging AI transforms unappealing spaces into attractive,{" "}
+            See how SuperStage AI transforms unappealing spaces into attractive,{" "}
             <strong className="text-white font-bold">listing-ready homes in seconds.</strong>
           </p>
         </div>

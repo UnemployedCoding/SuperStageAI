@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Send, Rocket } from "lucide-react";
+import { Send } from "lucide-react";
+import LogoIcon from "@/components/LogoIcon";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -22,12 +23,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
           {/* Column 1: Brand Info */}
           <div className="md:col-span-4 space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white">
-                <Rocket className="h-5 w-5 fill-current" />
-              </span>
+            <Link href="/" className="flex items-center gap-2.5">
+              <LogoIcon size={32} />
               <span className="font-display text-xl font-bold tracking-tight text-white">
-                VirtualStaging<span className="text-accent">AI</span>
+                SuperStage<span className="text-accent"> AI</span>
               </span>
             </Link>
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
@@ -118,7 +117,7 @@ export default function Footer() {
 
         {/* Bottom footer bar */}
         <div className="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>&copy; {new Date().getFullYear()} VirtualStagingAI Clone. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SuperStage AI. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>

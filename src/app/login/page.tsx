@@ -4,7 +4,8 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Lock, Eye, EyeOff, Rocket, ArrowLeft, User } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, User } from "lucide-react";
+import LogoIcon from "@/components/LogoIcon";
 import { createClient } from "@/lib/supabase/client";
 
 function LoginContent() {
@@ -92,7 +93,7 @@ function LoginContent() {
               {isSignUp ? "Create your account" : "Welcome back"}
             </h2>
             <p className="text-sm text-slate-500 font-medium">
-              {isSignUp ? "Already have an account?" : "New to Virtual Staging AI?"}{" "}
+              {isSignUp ? "Already have an account?" : "New to SuperStage AI?"}{" "}
               <button
                 onClick={() => { setIsSignUp(!isSignUp); setError(""); setMessage(""); }}
                 className="font-bold text-accent hover:text-accent-hover transition-colors"
@@ -244,7 +245,7 @@ function LoginContent() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-slate-950/20" />
         <div className="absolute bottom-16 left-16 right-16 space-y-6 text-white max-w-md">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-md px-3.5 py-1.5 text-xs font-semibold text-white border border-white/10">
-            <Rocket className="h-3.5 w-3.5 text-accent fill-current" />
+            <LogoIcon size={16} />
             Join 1,000+ Real Estate Pros
           </div>
           <blockquote className="space-y-2">

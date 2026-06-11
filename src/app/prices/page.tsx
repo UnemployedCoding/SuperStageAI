@@ -12,11 +12,11 @@ export default function PricingPage() {
   const plans = [
     {
       name: "Base",
-      photos: 32,
-      monthlyPrice: 39,
-      yearlyPrice: 29, // ~25% off
+      photos: 15,
+      monthlyPrice: 19,
+      yearlyPrice: 14, // ~25% off
       features: [
-        "32 credits per month",
+        "15 credits per month",
         "Credits reset monthly",
         "No rollover",
         "Unlimited edits per image",
@@ -120,7 +120,7 @@ export default function PricingPage() {
                   <div className="absolute -top-4 left-0 right-0 flex justify-center">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-orange-400 px-4 py-1.5 text-[11px] font-black text-white uppercase tracking-widest shadow-sm">
                       <Flame className="h-3.5 w-3.5 fill-current" />
-                      Best Value
+                      Most Popular
                     </span>
                   </div>
                 )}

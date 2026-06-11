@@ -15,12 +15,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Virtual Staging AI — Stage Empty Rooms in Seconds",
-  description: "Virtual Staging by AI. Get instant, highly realistic furnished room photos in seconds. Starting at just $16/month. Developed at Harvard Innovation Lab.",
+  title: "SuperStage AI — Stage Empty Rooms in Seconds",
+  description: "Virtual Staging by AI. Get instant, highly realistic furnished room photos in seconds. Starting at just $19/month.",
   openGraph: {
-    title: "Virtual Staging AI",
+    title: "SuperStage AI",
     description: "One click virtual staging, powered by AI.",
-    url: "https://virtualstagingai.app",
+    url: "https://superstageai.com",
     type: "website",
   },
 };

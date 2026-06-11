@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Rocket, LayoutDashboard } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
+import LogoIcon from "@/components/LogoIcon";
 import { createClient } from "@/lib/supabase/client";
 
 export default function Navbar() {
@@ -40,20 +41,12 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-md shadow-orange-500/20">
-                <Rocket className="h-5 w-5 fill-current" />
-              </span>
+            <Link href="/" className="flex items-center gap-2.5">
+              <LogoIcon size={32} />
               <span className="font-display text-xl font-bold tracking-tight text-primary">
-                VirtualStaging<span className="text-accent">AI</span>
+                SuperStage<span className="text-accent"> AI</span>
               </span>
             </Link>
-
-            {/* Harvard Badge */}
-            <div className="hidden lg:flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-0.5 text-[10px] font-semibold text-red-700 border border-red-100">
-              <span className="h-1 w-1 rounded-full bg-red-500 animate-pulse" />
-              Developed at Harvard Innovation Lab
-            </div>
           </div>
 
           {/* Desktop Navigation links */}
@@ -126,10 +119,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-100 bg-white px-4 py-4 space-y-3 shadow-lg transition-all">
-          <div className="flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-[10px] font-semibold text-red-700 border border-red-100 w-fit">
-            <span className="h-1 w-1 rounded-full bg-red-500" />
-            Harvard Innovation Lab Project
-          </div>
+
           <div className="space-y-1">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
