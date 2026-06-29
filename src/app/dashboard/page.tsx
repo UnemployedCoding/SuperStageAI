@@ -293,7 +293,8 @@ export default function DashboardPage() {
                 {/* Stage button */}
                 <button
                   onClick={handleStage}
-                  disabled={!uploadedFile || stagingState === "loading"}
+                  suppressHydrationWarning
+                  disabled={Boolean(!uploadedFile || stagingState === "loading")}
                   className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white font-bold py-4 flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 transition-all"
                 >
                   {stagingState === "loading" ? (
