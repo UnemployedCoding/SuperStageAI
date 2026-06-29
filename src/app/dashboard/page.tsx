@@ -54,11 +54,13 @@ export default function DashboardPage() {
   // Billing & Credits
   const [subscription, setSubscription] = useState<{ plan: string; billing: string; current_period_end: string } | null>(null);
   const [credits, setCredits] = useState<number | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const loadProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+      setUserEmail(user.email ?? null);
       const { data } = await supabase
         .from("profiles")
         .select("credits_remaining")
@@ -200,14 +202,21 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Sign Out */}
-        <button
-          onClick={handleSignOut}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-500 hover:text-red-500 hover:bg-red-50 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign Out
-        </button>
+        {/* User Info & Sign Out */}
+        <div className="pt-4 mt-auto border-t border-slate-100 space-y-2">
+          {userEmail && (
+            <div className="px-3 text-xs font-semibold text-slate-400 truncate">
+              {userEmail}
+            </div>
+          )}
+          <button
+            onClick={handleSignOut}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-500 hover:text-red-500 hover:bg-red-50 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </button>
+        </div>
       </aside>
 
       {/* ── Main content ── */}
