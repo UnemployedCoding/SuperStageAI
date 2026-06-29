@@ -19,7 +19,7 @@ export default function PricingPage() {
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
-      router.push("/login?redirect=/pricing");
+      router.push(`/login?signUp=true&redirect=/prices`);
       return;
     }
 
@@ -48,9 +48,8 @@ export default function PricingPage() {
         "15 credits per month",
         "Credits reset monthly",
         "No rollover",
-        "Unlimited edits per image",
         "All design styles",
-        "PNG & PDF downloads",
+        "High-res PNG downloads",
         "Email support",
       ],
       cta: "Get Base",
@@ -63,9 +62,8 @@ export default function PricingPage() {
       features: [
         "45 credits per month",
         "Unused credits roll over for 60 days",
-        "Unlimited edits per image",
         "All design styles",
-        "PNG & PDF downloads",
+        "High-res PNG downloads",
         "Priority support",
       ],
       cta: "Get Pro",
@@ -78,9 +76,8 @@ export default function PricingPage() {
       features: [
         "150 credits per month",
         "Unused credits roll over for 60 days",
-        "Unlimited edits per image",
         "All design styles",
-        "PNG & PDF downloads",
+        "High-res PNG downloads",
         "Priority support",
         "Best value, $0.99 per credit",
       ],
