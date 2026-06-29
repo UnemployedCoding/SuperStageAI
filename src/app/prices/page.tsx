@@ -2,11 +2,41 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Check, HelpCircle, ChevronDown, Flame } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function PricingPage() {
-  const billingCycle = "monthly";
+  const router = useRouter();
+  const supabase = createClient();
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  const handlePlanClick = async (e: React.MouseEvent, planName: string) => {
+    e.preventDefault();
+    setLoadingPlan(planName);
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      router.push("/login?redirect=/pricing");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planName.toLowerCase() }),
+      });
+
+      const { url } = await response.json();
+      if (url) window.location.href = url;
+    } catch (err) {
+      console.error(err);
+      setLoadingPlan(null);
+    }
+  };
 
   // Pricing plans definition
   const plans = [
@@ -156,16 +186,17 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <Link
-                  href={`/login?signUp=true&plan=${plan.name.toLowerCase()}&billing=${billingCycle}`}
+                <button
+                  onClick={(e) => handlePlanClick(e, plan.name)}
+                  disabled={loadingPlan === plan.name}
                   className={`mt-10 block w-full rounded-2xl py-4 text-center text-sm font-bold transition-all ${
                     plan.popular
                       ? "bg-gradient-to-b from-accent to-[#ef6000] hover:to-accent text-white shadow-xl shadow-orange-500/20"
                       : "bg-slate-900 hover:bg-slate-800 text-white shadow-lg shadow-slate-900/10"
-                  }`}
+                  } ${loadingPlan === plan.name ? 'opacity-70 cursor-wait' : ''}`}
                 >
-                  {plan.cta}
-                </Link>
+                  {loadingPlan === plan.name ? "Processing..." : plan.cta}
+                </button>
               </div>
               </div>
             );
