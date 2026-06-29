@@ -33,11 +33,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Image is required" }, { status: 400 });
     }
 
-    const apiKey = process.env.MNML_API_KEY;
+    const keysStr = process.env.MNML_API_KEYS || process.env.MNML_API_KEY;
+    const apiKeys = keysStr ? keysStr.split(",").map(k => k.trim()).filter(Boolean) : [];
 
     // If no API key is provided, return a mock response for testing the UI
-    if (!apiKey) {
-      console.warn("No MNML_API_KEY found. Returning mock response.");
+    if (apiKeys.length === 0) {
+      console.warn("No MNML_API_KEYS found. Returning mock response.");
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 3000));
       
@@ -47,73 +48,98 @@ export async function POST(request: Request) {
       return NextResponse.json({ 
         success: true, 
         staged_image_url: mockImage,
-        message: "Mock response generated. Add MNML_API_KEY to .env.local for real results."
+        message: "Mock response generated. Add MNML_API_KEYS to .env.local for real results."
       });
     }
 
     // Prepare request for MNML.ai ArchDiffusion v4.4-Lite
-    const mnmlFormData = new FormData();
-    mnmlFormData.append("image", image);
-
     const formattedRoom = (roomType || "living-room").replace(/_/g, " ");
     const formattedStyle = style || "modern";
     const roomStyle = formattedStyle.charAt(0).toUpperCase() + formattedStyle.slice(1);
 
-    // v4.4-Lite only needs: image, prompt, expert_name
-    mnmlFormData.append("prompt", `Beautiful ${roomStyle} interior design of a ${formattedRoom}, fully furnished, photorealistic`);
-    mnmlFormData.append("expert_name", "interior");
-    mnmlFormData.append("render_style", "photoreal");
-    mnmlFormData.append("geometry", "precise");
+    // Randomize array to load balance across keys
+    const shuffledKeys = apiKeys.sort(() => 0.5 - Math.random());
 
-    const response = await fetch("https://api.mnmlai.dev/v1/archDiffusion-v44-lite", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: mnmlFormData,
-    });
+    let stagedImageUrl: string | null = null;
+    let lastError = "Failed to generate image.";
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("MNML API Error:", response.status, errorData);
-      const errorMessage = errorData.message || "Failed to generate image. Please try again.";
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: response.status }
-      );
-    }
+    for (const apiKey of shuffledKeys) {
+      try {
+        const mnmlFormData = new FormData();
+        mnmlFormData.append("image", image);
+        // v4.4-Lite only needs: image, prompt, expert_name
+        mnmlFormData.append("prompt", `Beautiful ${roomStyle} interior design of a ${formattedRoom}, fully furnished, photorealistic`);
+        mnmlFormData.append("expert_name", "interior");
+        mnmlFormData.append("render_style", "photoreal");
+        mnmlFormData.append("geometry", "precise");
 
-    const data = await response.json();
-    
-    // The exact response structure depends on MNML.ai, but typically includes a result URL
-    // e.g., { result: "https://..." } or { image_url: "https://..." }
-    let stagedImageUrl = data.result || data.image_url || data.url;
-
-    if (data.id && !stagedImageUrl) {
-      // Poll for status
-      let isProcessing = true;
-      let attempts = 0;
-      while (isProcessing && attempts < 30) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        const statusRes = await fetch(`https://api.mnmlai.dev/v1/status/${data.id}`, {
-          headers: { "Authorization": `Bearer ${apiKey}` }
+        const response = await fetch("https://api.mnmlai.dev/v1/archDiffusion-v44-lite", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+          },
+          body: mnmlFormData,
         });
-        if (!statusRes.ok) continue;
-        
-        const statusData = await statusRes.json();
-        const isSuccess = statusData.status === "success" || statusData.status === "succeeded";
-        if (isSuccess && statusData.message && statusData.message.length > 0) {
-          stagedImageUrl = statusData.message[0];
-          isProcessing = false;
-        } else if (statusData.status === "failed" || statusData.status === "error") {
-          return NextResponse.json({ error: "Image generation failed" }, { status: 500 });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error(`MNML API Error (Key ${apiKey.substring(0, 6)}...):`, response.status, errorData);
+          lastError = errorData.message || "Failed to generate image with this key.";
+          continue; // Try the next key
         }
-        attempts++;
+
+        const data = await response.json();
+        
+        // The exact response structure depends on MNML.ai, but typically includes a result URL
+        // e.g., { result: "https://..." } or { image_url: "https://..." }
+        stagedImageUrl = data.result || data.image_url || data.url;
+
+        if (data.id && !stagedImageUrl) {
+          // Poll for status
+          let isProcessing = true;
+          let attempts = 0;
+          let pollFailed = false;
+
+          while (isProcessing && attempts < 30) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            const statusRes = await fetch(`https://api.mnmlai.dev/v1/status/${data.id}`, {
+              headers: { "Authorization": `Bearer ${apiKey}` }
+            });
+            if (!statusRes.ok) {
+              attempts++;
+              continue;
+            }
+            
+            const statusData = await statusRes.json();
+            const isSuccess = statusData.status === "success" || statusData.status === "succeeded";
+            if (isSuccess && statusData.message && statusData.message.length > 0) {
+              stagedImageUrl = statusData.message[0];
+              isProcessing = false;
+            } else if (statusData.status === "failed" || statusData.status === "error") {
+              pollFailed = true;
+              lastError = "Image generation failed during polling.";
+              break;
+            }
+            attempts++;
+          }
+          
+          if (pollFailed || !stagedImageUrl) {
+            continue; // Polling failed or timed out, try the next key
+          }
+        }
+
+        if (stagedImageUrl) {
+          break; // Success! Exit the loop and stop trying keys.
+        }
+      } catch (err) {
+        console.error(`Fetch error with key ${apiKey.substring(0, 6)}...:`, err);
+        lastError = err instanceof Error ? err.message : "Network error";
+        continue; // Try the next key
       }
     }
 
     if (!stagedImageUrl) {
-      return NextResponse.json({ error: "Failed to retrieve generated image" }, { status: 500 });
+      return NextResponse.json({ error: lastError }, { status: 500 });
     }
 
     // Save to staging history and deduct 1 credit (only if user is logged in)
