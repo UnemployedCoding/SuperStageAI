@@ -149,14 +149,6 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-slate-50">
       {/* ── Sidebar ── */}
       <aside className="hidden md:flex w-64 flex-col bg-white border-r border-slate-100 px-4 py-6 fixed h-full">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 mb-8 px-2">
-          <LogoIcon size={30} />
-          <span className="font-display text-lg font-bold tracking-tight text-primary">
-            SuperStage<span className="text-accent"> AI</span>
-          </span>
-        </Link>
-
         {/* Nav */}
         <nav className="flex-1 space-y-1">
           {[
@@ -278,7 +270,7 @@ export default function DashboardPage() {
                   {stagingState === "loading" ? (
                     <>
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      Staging… ({elapsed}s) — can take up to 30s
+                      Staging… ({elapsed}s) — can take up to 45s
                     </>
                   ) : (
                     <>

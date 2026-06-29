@@ -197,7 +197,13 @@ export default function GalleryPage() {
   // ── Scroll active thumbnail into view ──
   useEffect(() => {
     const el = thumbsRef.current?.children[slideIndex] as HTMLElement | undefined;
-    el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    if (el && thumbsRef.current) {
+      const container = thumbsRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const scrollByAmount = elRect.left - containerRect.left - containerRect.width / 2 + elRect.width / 2;
+      container.scrollBy({ left: scrollByAmount, behavior: "smooth" });
+    }
   }, [slideIndex]);
 
   // ── Handlers ──

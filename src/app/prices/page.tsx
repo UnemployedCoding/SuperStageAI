@@ -14,7 +14,6 @@ export default function PricingPage() {
       name: "Base",
       photos: 15,
       monthlyPrice: 19,
-      yearlyPrice: 14, // ~25% off
       features: [
         "15 credits per month",
         "Credits reset monthly",
@@ -31,7 +30,6 @@ export default function PricingPage() {
       name: "Pro",
       photos: 45,
       monthlyPrice: 49,
-      yearlyPrice: 39, // ~20% off
       features: [
         "45 credits per month",
         "Unused credits roll over for 60 days",
@@ -47,7 +45,6 @@ export default function PricingPage() {
       name: "Business",
       photos: 150,
       monthlyPrice: 149,
-      yearlyPrice: 119, // ~20% off
       features: [
         "150 credits per month",
         "Unused credits roll over for 60 days",
@@ -135,7 +132,7 @@ export default function PricingPage() {
                       <span className="text-4xl font-semibold text-primary tracking-tight">${price}</span>
                       <span className="text-sm text-slate-500 font-medium uppercase tracking-wider">/month</span>
                     </div>
-                    <p className="text-xs text-slate-400 font-medium mt-2">${ratePerPhoto} per generated image</p>
+                    <p className="text-xs text-slate-400 font-medium mt-2">${ratePerPhoto} per credit</p>
                   </div>
                   
                   <div className={`rounded-2xl p-5 mt-6 border ${plan.popular ? 'bg-orange-50/50 border-orange-100' : 'bg-slate-50/80 border-slate-100'}`}>

@@ -9,7 +9,7 @@ export default async function DashboardLayout({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Should be caught by middleware, but double-check here
+  // Redirect to login if not authenticated
   if (!user) redirect("/login");
 
   // Temporarily commented out subscription check to allow testing/image editing

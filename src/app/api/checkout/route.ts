@@ -10,8 +10,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { plan, billing } = await request.json();
-  const priceId = STRIPE_PRICES[plan]?.[billing as "monthly" | "yearly"];
+  const { plan } = await request.json();
+  const priceId = STRIPE_PRICES[plan]?.monthly;
 
   if (!priceId) {
     return NextResponse.json({ error: "Invalid plan or billing cycle" }, { status: 400 });

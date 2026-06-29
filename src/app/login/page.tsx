@@ -234,7 +234,7 @@ function LoginContent() {
       </div>
 
       {/* Right Column: Visual panel */}
-      <div className="hidden lg:block relative flex-1 bg-slate-950">
+      <div className="hidden lg:flex relative flex-1 bg-slate-950 overflow-hidden">
         <Image
           src="/demo/living-room-scandinavian.9495b32c.webp"
           alt="Beautifully staged Scandinavian living room"

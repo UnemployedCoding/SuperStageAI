@@ -37,34 +37,24 @@ export async function POST(request: Request) {
       });
     }
 
-    // Prepare request for MNML.ai ArchDiffusion v4.3
+    // Prepare request for MNML.ai ArchDiffusion v4.4-Lite
     const mnmlFormData = new FormData();
     mnmlFormData.append("image", image);
-    
-    const formattedRoom = (roomType || "living-room").replace("-", " ");
+
+    const formattedRoom = (roomType || "living-room").replace(/_/g, " ");
     const formattedStyle = style || "modern";
-    
-    let roomStyle = "Modern interior";
-    if (formattedStyle === "modern") {
-      roomStyle = "Modern interior";
-    } else {
-      roomStyle = formattedStyle.charAt(0).toUpperCase() + formattedStyle.slice(1);
-    }
+    const roomStyle = formattedStyle.charAt(0).toUpperCase() + formattedStyle.slice(1);
 
-    // ArchDiffusion v4.3 requires the "prompt" parameter
-    mnmlFormData.append("prompt", `Beautiful ${roomStyle} design of a ${formattedRoom}`);
+    // v4.4-Lite only needs: image, prompt, expert_name
+    mnmlFormData.append("prompt", `Beautiful ${roomStyle} interior design of a ${formattedRoom}, fully furnished, photorealistic`);
     mnmlFormData.append("expert_name", "interior");
-    mnmlFormData.append("room_type", formattedRoom);
-    mnmlFormData.append("room_style", roomStyle);
-    mnmlFormData.append("geometry", "precise");
     mnmlFormData.append("render_style", "photoreal");
-    mnmlFormData.append("furnishing_level", "full");
+    mnmlFormData.append("geometry", "precise");
 
-    const response = await fetch("https://api.mnmlai.dev/v1/archDiffusion-v43", {
+    const response = await fetch("https://api.mnmlai.dev/v1/archDiffusion-v44-lite", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
-        // FormData automatically sets the correct Content-Type with boundary
       },
       body: mnmlFormData,
     });
@@ -112,14 +102,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to retrieve generated image" }, { status: 500 });
     }
 
-    // Save to staging history
-    await supabase.from("stagings").insert({
-      user_id: user.id,
-      before_url: "", // local file — no public URL
-      after_url: stagedImageUrl,
-      room_type: roomType,
-      style,
-    });
+    // Save to staging history (only if user is logged in)
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("stagings").insert({
+        user_id: user.id,
+        before_url: "", // local file — no public URL
+        after_url: stagedImageUrl,
+        room_type: roomType,
+        style,
+      });
+    }
 
     return NextResponse.json({ success: true, staged_image_url: stagedImageUrl });
   } catch (error) {
