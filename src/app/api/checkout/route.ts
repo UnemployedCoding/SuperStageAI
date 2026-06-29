@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { plan } = await request.json();
+  const { plan, billing = "monthly" } = await request.json();
   const priceId = STRIPE_PRICES[plan]?.monthly;
 
   if (!priceId) {
