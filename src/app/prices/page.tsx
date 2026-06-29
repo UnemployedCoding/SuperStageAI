@@ -13,7 +13,7 @@ export default function PricingPage() {
     {
       name: "Base",
       photos: 15,
-      monthlyPrice: 19,
+      monthlyPrice: 39,
       features: [
         "15 credits per month",
         "Credits reset monthly",

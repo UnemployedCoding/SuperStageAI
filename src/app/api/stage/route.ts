@@ -9,6 +9,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Check user has enough credits
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("credits_remaining")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.credits_remaining <= 0) {
+    return NextResponse.json(
+      { error: "You have no credits remaining. Please upgrade your plan." },
+      { status: 403 }
+    );
+  }
+
   try {
     const formData = await request.formData();
     const image = formData.get("image") as File;
@@ -102,7 +116,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to retrieve generated image" }, { status: 500 });
     }
 
-    // Save to staging history (only if user is logged in)
+    // Save to staging history and deduct 1 credit (only if user is logged in)
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       await supabase.from("stagings").insert({
@@ -112,6 +126,9 @@ export async function POST(request: Request) {
         room_type: roomType,
         style,
       });
+
+      // Deduct 1 credit
+      await supabase.rpc("decrement_credits", { user_id_input: user.id });
     }
 
     return NextResponse.json({ success: true, staged_image_url: stagedImageUrl });

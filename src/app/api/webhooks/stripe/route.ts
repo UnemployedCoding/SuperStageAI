@@ -10,6 +10,13 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Credits granted per plan (1 credit = 1 MNMLAI generation)
+const PLAN_CREDITS: Record<string, number> = {
+  base: 15,
+  pro: 45,
+  business: 150,
+};
+
 export async function POST(request: Request) {
   const body = await request.text();
   const headersList = await headers();
@@ -25,27 +32,64 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
+
+    // ── New subscription: save to DB and grant credits ──────────────────────
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.supabase_user_id;
       const plan = session.metadata?.plan;
-      const billing = session.metadata?.billing;
 
-      if (userId && session.subscription) {
+      if (userId && session.subscription && plan) {
         const sub = await stripe.subscriptions.retrieve(session.subscription as string);
+        const credits = PLAN_CREDITS[plan] ?? 0;
+
+        // Save subscription record
         await supabaseAdmin.from("subscriptions").upsert({
           user_id: userId,
           plan,
-          billing,
+          billing: "monthly",
           status: "active",
           stripe_subscription_id: sub.id,
           stripe_customer_id: session.customer as string,
           current_period_end: new Date((sub as unknown as { current_period_end: number }).current_period_end * 1000).toISOString(),
         });
+
+        // Grant credits to the user's profile
+        await supabaseAdmin.from("profiles").update({
+          credits_remaining: credits,
+        }).eq("id", userId);
+
+        console.log(`✅ Granted ${credits} credits to user ${userId} on plan ${plan}`);
       }
       break;
     }
 
+    // ── Monthly renewal: reset credits for the new billing period ───────────
+    case "invoice.paid": {
+      const invoice = event.data.object as Stripe.Invoice;
+      const stripeSubId = (invoice as unknown as { subscription: string }).subscription;
+      if (!stripeSubId) break;
+
+      // Get the subscription record to find user and plan
+      const { data: subRecord } = await supabaseAdmin
+        .from("subscriptions")
+        .select("user_id, plan")
+        .eq("stripe_subscription_id", stripeSubId)
+        .eq("status", "active")
+        .single();
+
+      if (subRecord) {
+        const credits = PLAN_CREDITS[subRecord.plan] ?? 0;
+        await supabaseAdmin.from("profiles").update({
+          credits_remaining: credits,
+        }).eq("id", subRecord.user_id);
+
+        console.log(`🔄 Reset ${credits} credits for user ${subRecord.user_id} on renewal`);
+      }
+      break;
+    }
+
+    // ── Subscription updated (e.g. plan change) ─────────────────────────────
     case "customer.subscription.updated": {
       const sub = event.data.object as Stripe.Subscription;
       const status = sub.status === "active" ? "active" : "inactive";
@@ -56,11 +100,26 @@ export async function POST(request: Request) {
       break;
     }
 
+    // ── Subscription cancelled: set status and zero out credits ─────────────
     case "customer.subscription.deleted": {
       const sub = event.data.object as Stripe.Subscription;
+
+      const { data: subRecord } = await supabaseAdmin
+        .from("subscriptions")
+        .select("user_id")
+        .eq("stripe_subscription_id", sub.id)
+        .single();
+
       await supabaseAdmin.from("subscriptions").update({
         status: "canceled",
       }).eq("stripe_subscription_id", sub.id);
+
+      // Zero out credits on cancellation
+      if (subRecord) {
+        await supabaseAdmin.from("profiles").update({
+          credits_remaining: 0,
+        }).eq("id", subRecord.user_id);
+      }
       break;
     }
   }
