@@ -204,11 +204,7 @@ export default function DashboardPage() {
 
         {/* User Info & Sign Out */}
         <div className="pt-4 mt-auto border-t border-slate-100 space-y-2">
-          {userEmail && (
-            <div className="px-3 text-xs font-semibold text-slate-400 truncate">
-              {userEmail}
-            </div>
-          )}
+
           <button
             onClick={handleSignOut}
             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-500 hover:text-red-500 hover:bg-red-50 transition-colors"
@@ -417,6 +413,15 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-extrabold text-primary">Billing</h1>
               <p className="text-slate-500 text-sm mt-1">Manage your subscription.</p>
             </div>
+
+            {userEmail && (
+              <div className="rounded-2xl bg-white border border-slate-100 p-6 shadow-sm flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Account Email</p>
+                  <p className="text-sm font-semibold text-slate-700 mt-1">{userEmail}</p>
+                </div>
+              </div>
+            )}
 
             {subscription ? (
               <div className="rounded-2xl bg-white border border-slate-100 p-6 shadow-sm space-y-5">

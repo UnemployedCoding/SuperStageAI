@@ -4,8 +4,8 @@
 
 ## Features
 - **Instant Virtual Staging:** Upload empty room photos and get them staged instantly.
-- **Multiple Design Styles:** Over 50 interior design styles available (Modern, Scandinavian, Luxury, Coastal, Farmhouse, etc.).
-- **Affordable Pricing:** Monthly subscriptions starting from $19/month (less than $1.30 per generated image).
+- **Multiple Design Styles:** Many interior design styles available (Modern, Scandinavian, Luxury, Coastal, Farmhouse, etc.).
+- **Affordable Pricing:** Monthly subscriptions starting from $39/month (less than $1.30 per generated image).
 - **Interactive Before & After Gallery:** Compare the original and staged versions of the rooms with an interactive drag slider.
 - **Secure Payments:** Integrated with Stripe for fast and secure subscription management.
 - **User Dashboard:** A seamless user portal to view staging history, manage billing, and stage new photos.

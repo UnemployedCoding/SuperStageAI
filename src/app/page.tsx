@@ -120,11 +120,11 @@ export default function Home() {
     },
     {
       q: "Which staging styles are available?",
-      a: "We support over 50 design styles, including Modern, Scandinavian, Luxury, Midcentury, Coastal, Farmhouse, and Industrial.",
+      a: "We support many design styles, including Modern, Scandinavian, Luxury, Midcentury, Coastal, Farmhouse, and Industrial.",
     },
     {
       q: "Is there a free trial?",
-      a: "We don't offer a free trial, but our plans start from as little as $19/month with no long-term commitment. You can cancel anytime.",
+      a: "We don't offer a free trial, but our plans start from as little as $39/month with no long-term commitment. You can cancel anytime.",
     },
   ];
 
@@ -230,7 +230,7 @@ export default function Home() {
               </div>
               <div className="space-y-1">
                 <p className="font-display text-3xl font-extrabold text-primary tracking-tight">
-                  50<span className="text-accent">+</span>
+                  6<span className="text-accent">+</span>
                 </p>
                 <p className="text-sm text-slate-500 font-medium">Design Styles</p>
               </div>
@@ -346,7 +346,7 @@ export default function Home() {
               </span>
               <h3 className="text-xl font-bold text-primary">Save Thousands of Dollars</h3>
               <p className="text-sm text-slate-500 leading-relaxed">
-                Physical staging can cost upwards of $2,000 per property. StageLumen stages your entire list starting at just $19.
+                Physical staging can cost upwards of $2,000 per property. StageLumen stages your entire list starting at just $39.
               </p>
             </div>
           </div>
@@ -444,7 +444,7 @@ export default function Home() {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-semibold text-primary">Furniture types</td>
-                  <td className="px-6 py-4 bg-accent/5 font-semibold text-accent">50+ design styles</td>
+                  <td className="px-6 py-4 bg-accent/5 font-semibold text-accent">6+ design styles</td>
                   <td className="px-6 py-4 text-slate-500">Limited catalog</td>
                 </tr>
                 <tr>
@@ -515,7 +515,7 @@ export default function Home() {
             Ready to Stun Your Home Buyers?
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Get instant virtual staging for your listings. Professional results starting at just $19/month.
+            Get instant virtual staging for your listings. Professional results starting at just $39/month.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
@@ -540,7 +540,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-1.5">
               <Check className="h-4 w-4 text-accent" />
-              50+ staging styles
+              6+ staging styles
             </div>
             <div className="flex items-center gap-1.5">
               <Check className="h-4 w-4 text-accent" />
