@@ -53,7 +53,7 @@ export async function POST(request: Request) {
             stripe_subscription_id: sub.id,
             stripe_customer_id: session.customer as string,
             current_period_end: new Date(((sub as any).current_period_end || sub.items?.data[0]?.current_period_end || Date.now() / 1000) * 1000).toISOString(),
-          });
+          }, { onConflict: "stripe_subscription_id" });
           
           if (subErr) console.error("Supabase upsert error:", subErr);
 
