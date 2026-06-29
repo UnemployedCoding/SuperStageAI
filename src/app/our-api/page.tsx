@@ -68,7 +68,7 @@ export default function ApiPage() {
         <div className="max-w-3xl mx-auto space-y-4">
           <h3 className="text-xl font-bold text-primary text-center">Staging Request Example</h3>
           <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 overflow-x-auto text-sm text-slate-300 font-mono shadow-xl">
-            <pre>{`curl -X POST "https://api.superstageai.com/v1/stage" \\
+            <pre>{`curl -X POST "https://api.stagelumen.com/v1/stage" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{

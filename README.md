@@ -1,6 +1,6 @@
-# SuperStage AI
+# StageLumen
 
-**SuperStage AI** is a state-of-the-art virtual staging SaaS web application designed for real estate agents and property managers. It transforms photos of empty rooms into fully furnished, listing-ready homes in under 45 seconds using advanced AI.
+**StageLumen** is a state-of-the-art virtual staging SaaS web application designed for real estate agents and property managers. It transforms photos of empty rooms into fully furnished, listing-ready homes in under 45 seconds using advanced AI.
 
 ## Features
 - **Instant Virtual Staging:** Upload empty room photos and get them staged instantly.

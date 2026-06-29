@@ -1,0 +1,18 @@
+{
+  "id": "evt_1TnZkzIeq52i3OHhoLRa5YUA",
+  "object": "event",
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_a1kg0eSzPeiwXwuEzLK32pQtCub4u8sLKIlzkHHZ71HVs7WAFmE8yEiSbF",
+      "object": "checkout.session",
+      "customer": "cus_UnA4ysR32jB92s",
+      "metadata": {
+        "billing": "monthly",
+        "plan": "pro",
+        "supabase_user_id": "8a61779c-edb8-405e-bea7-22cd6bd31882"
+      },
+      "subscription": "sub_1TnZkyIeq52i3OHhdN6vdGnG"
+    }
+  }
+}

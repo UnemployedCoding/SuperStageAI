@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     return new NextResponse(blob, {
       headers: {
         "Content-Type": contentType,
-        "Content-Disposition": `attachment; filename="superstage-room-${Date.now()}.${ext}"`,
+        "Content-Disposition": `attachment; filename="stagelumen-room-${Date.now()}.${ext}"`,
       },
     });
   } catch (error) {

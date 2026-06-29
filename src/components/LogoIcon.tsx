@@ -9,7 +9,7 @@ export default function LogoIcon({ className = "", size = 28 }: LogoIconProps) {
   return (
     <Image
       src="/logo.svg"
-      alt="SuperStage AI"
+      alt="StageLumen"
       width={size}
       height={size}
       className={className}

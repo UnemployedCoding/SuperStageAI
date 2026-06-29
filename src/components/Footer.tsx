@@ -26,7 +26,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-2.5">
               <LogoIcon size={32} />
               <span className="font-display text-xl font-bold tracking-tight text-white">
-                SuperStage<span className="text-accent"> AI</span>
+                Stage<span className="text-accent">Lumen</span>
               </span>
             </Link>
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
@@ -117,7 +117,7 @@ export default function Footer() {
 
         {/* Bottom footer bar */}
         <div className="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>&copy; {new Date().getFullYear()} SuperStage AI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} StageLumen. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>

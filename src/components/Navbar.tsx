@@ -44,7 +44,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center gap-2.5">
               <LogoIcon size={32} />
               <span className="font-display text-xl font-bold tracking-tight text-primary">
-                SuperStage<span className="text-accent"> AI</span>
+                Stage<span className="text-accent">Lumen</span>
               </span>
             </Link>
           </div>

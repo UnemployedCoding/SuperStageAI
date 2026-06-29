@@ -346,7 +346,7 @@ export default function Home() {
               </span>
               <h3 className="text-xl font-bold text-primary">Save Thousands of Dollars</h3>
               <p className="text-sm text-slate-500 leading-relaxed">
-                Physical staging can cost upwards of $2,000 per property. SuperStage AI stages your entire list starting at just $19.
+                Physical staging can cost upwards of $2,000 per property. StageLumen stages your entire list starting at just $19.
               </p>
             </div>
           </div>
@@ -410,7 +410,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-16">
           <div className="max-w-2xl mx-auto space-y-4">
             <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-primary">
-              SuperStage AI vs. Traditional Methods
+              StageLumen vs. Traditional Methods
             </h2>
             <p className="text-slate-600 text-base">
               A quick look at how automated AI staging outperforms traditional alternatives.
@@ -422,7 +422,7 @@ export default function Home() {
               <thead>
                 <tr className="bg-slate-950 text-white font-bold text-sm">
                   <th className="px-6 py-4">Feature</th>
-                  <th className="px-6 py-4 bg-accent/90">SuperStage AI</th>
+                  <th className="px-6 py-4 bg-accent/90">StageLumen</th>
                   <th className="px-6 py-4 text-slate-400">Traditional Staging</th>
                 </tr>
               </thead>

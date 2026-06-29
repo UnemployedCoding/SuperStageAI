@@ -237,7 +237,7 @@ export default function GalleryPage() {
             <b>See the Transformation:</b>{" "}Before &amp; After Gallery
           </h1>
           <p className="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto">
-            See how SuperStage AI transforms unappealing spaces into attractive,{" "}
+            See how StageLumen transforms unappealing spaces into attractive,{" "}
             <b className="text-slate-800">listing-ready homes in seconds.</b>
           </p>
         </div>

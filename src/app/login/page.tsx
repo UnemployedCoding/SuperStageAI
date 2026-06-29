@@ -93,7 +93,7 @@ function LoginContent() {
               {isSignUp ? "Create your account" : "Welcome back"}
             </h2>
             <p className="text-sm text-slate-500 font-medium">
-              {isSignUp ? "Already have an account?" : "New to SuperStage AI?"}{" "}
+              {isSignUp ? "Already have an account?" : "New to StageLumen?"}{" "}
               <button
                 onClick={() => { setIsSignUp(!isSignUp); setError(""); setMessage(""); }}
                 className="font-bold text-accent hover:text-accent-hover transition-colors"

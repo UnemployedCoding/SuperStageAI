@@ -136,7 +136,7 @@ export default function Uploader() {
   return (
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-3xl shadow-xl border border-slate-100">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Try SuperStage AI for Free</h2>
+        <h2 className="text-3xl font-bold text-slate-900 mb-2">Try StageLumen for Free</h2>
         <p className="text-slate-500">Upload a photo of an empty room and let AI furnish it in seconds.</p>
       </div>
 
