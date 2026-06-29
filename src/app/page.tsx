@@ -139,14 +139,19 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left Headline text */}
             <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3.5 py-1.5 text-xs font-semibold text-accent border border-orange-100/50">
-                <Sparkles className="h-3.5 w-3.5 fill-current" />
-                AI Built for Real Estate
+              <div className="flex flex-wrap items-center gap-3 justify-center lg:justify-start">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3.5 py-1.5 text-xs font-semibold text-accent border border-orange-100/50">
+                  <Sparkles className="h-3.5 w-3.5 fill-current" />
+                  AI Built for Real Estate
+                </div>
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-semibold text-slate-700 border border-slate-200/50">
+                  🇦🇺 100% Australian Owned & Operated
+                </div>
               </div>
               <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-primary leading-[1.15]">
-                Stop losing buyers to{" "}
+                Real Estate Photo Transformation{" "}
                 <span className="bg-gradient-to-r from-accent to-orange-600 bg-clip-text text-transparent">
-                  empty rooms
+                  in seconds
                 </span>
               </h1>
               <div className="space-y-4 max-w-lg mx-auto lg:mx-0">
