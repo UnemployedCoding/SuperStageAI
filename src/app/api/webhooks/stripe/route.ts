@@ -39,27 +39,36 @@ export async function POST(request: Request) {
       const userId = session.metadata?.supabase_user_id;
       const plan = session.metadata?.plan;
 
-      if (userId && session.subscription && plan) {
-        const sub = await stripe.subscriptions.retrieve(session.subscription as string);
-        const credits = PLAN_CREDITS[plan] ?? 0;
+      try {
+        if (userId && session.subscription && plan) {
+          const sub = await stripe.subscriptions.retrieve(session.subscription as string);
+          const credits = PLAN_CREDITS[plan] ?? 0;
 
-        // Save subscription record
-        await supabaseAdmin.from("subscriptions").upsert({
-          user_id: userId,
-          plan,
-          billing: "monthly",
-          status: "active",
-          stripe_subscription_id: sub.id,
-          stripe_customer_id: session.customer as string,
-          current_period_end: new Date((sub as unknown as { current_period_end: number }).current_period_end * 1000).toISOString(),
-        });
+          // Save subscription record
+          const { error: subErr } = await supabaseAdmin.from("subscriptions").upsert({
+            user_id: userId,
+            plan,
+            billing: "monthly",
+            status: "active",
+            stripe_subscription_id: sub.id,
+            stripe_customer_id: session.customer as string,
+            current_period_end: new Date(((sub as any).current_period_end || sub.items?.data[0]?.current_period_end || Date.now() / 1000) * 1000).toISOString(),
+          });
+          
+          if (subErr) console.error("Supabase upsert error:", subErr);
 
-        // Grant credits to the user's profile
-        await supabaseAdmin.from("profiles").update({
-          credits_remaining: credits,
-        }).eq("id", userId);
+          // Grant credits to the user's profile
+          const { error: profErr } = await supabaseAdmin.from("profiles").update({
+            credits_remaining: credits,
+          }).eq("id", userId);
+          
+          if (profErr) console.error("Supabase profile update error:", profErr);
 
-        console.log(`✅ Granted ${credits} credits to user ${userId} on plan ${plan}`);
+          console.log(`✅ Granted ${credits} credits to user ${userId} on plan ${plan}`);
+        }
+      } catch (err: any) {
+        console.error("Webhook processing error:", err);
+        return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
       }
       break;
     }
@@ -95,7 +104,7 @@ export async function POST(request: Request) {
       const status = sub.status === "active" ? "active" : "inactive";
       await supabaseAdmin.from("subscriptions").update({
         status,
-        current_period_end: new Date((sub as unknown as { current_period_end: number }).current_period_end * 1000).toISOString(),
+        current_period_end: new Date((((sub as any).current_period_end || sub.items?.data[0]?.current_period_end) as number) * 1000).toISOString(),
       }).eq("stripe_subscription_id", sub.id);
       break;
     }
