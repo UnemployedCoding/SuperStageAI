@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -51,8 +51,23 @@ export default function DashboardPage() {
   const [history, setHistory] = useState<{ id: string; before_url: string; after_url: string; room_type: string; style: string; created_at: string }[]>([]);
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
-  // Billing
+  // Billing & Credits
   const [subscription, setSubscription] = useState<{ plan: string; billing: string; current_period_end: string } | null>(null);
+  const [credits, setCredits] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from("profiles")
+        .select("credits_remaining")
+        .eq("id", user.id)
+        .single();
+      if (data) setCredits(data.credits_remaining);
+    };
+    loadProfile();
+  }, [supabase]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -102,6 +117,7 @@ export default function DashboardPage() {
 
       setStagedUrl(data.staged_image_url);
       setStagingState("done");
+      setCredits((prev) => (prev && prev > 0 ? prev - 1 : 0));
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
       setStagingState("error");
@@ -170,6 +186,19 @@ export default function DashboardPage() {
             </button>
           ))}
         </nav>
+
+        {/* Credits */}
+        {credits !== null && (
+          <div className="mb-4 mx-2 px-3 py-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center shadow-inner">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining Credits</span>
+            <span className="text-2xl font-black text-slate-700">{credits}</span>
+            {credits === 0 && (
+              <Link href="/prices" className="mt-2 text-xs font-semibold text-accent hover:underline">
+                Upgrade Plan
+              </Link>
+            )}
+          </div>
+        )}
 
         {/* Sign Out */}
         <button
