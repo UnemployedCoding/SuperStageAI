@@ -386,10 +386,8 @@ export default function DashboardPage() {
                       <p className="text-sm font-semibold text-slate-700 capitalize">{item.room_type.replace("_", " ")} · {item.style}</p>
                       <p className="text-xs text-slate-400">{new Date(item.created_at).toLocaleDateString()}</p>
                       <a
-                        href={item.after_url}
+                        href={`/api/download?url=${encodeURIComponent(item.after_url)}`}
                         download
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline"
                       >
                         <Download className="h-3.5 w-3.5" />
