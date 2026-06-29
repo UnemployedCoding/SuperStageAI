@@ -32,18 +32,7 @@ export default function Footer() {
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
               Transform empty rooms into fully-furnished spaces in seconds. Affordable, beautiful virtual staging designed for real estate professionals.
             </p>
-            <div className="flex gap-4 pt-2">
-              {/* Simple icons placeholders */}
-              <a href="#" className="h-8 w-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
-                T
-              </a>
-              <a href="#" className="h-8 w-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
-                L
-              </a>
-              <a href="#" className="h-8 w-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
-                F
-              </a>
-            </div>
+
           </div>
 
           {/* Column 2: Product links */}
@@ -119,8 +108,8 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>&copy; {new Date().getFullYear()} StageLumen. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
+            <Link href="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
             <a href="#" className="hover:text-slate-400 transition-colors">Refund Policy</a>
           </div>
         </div>
