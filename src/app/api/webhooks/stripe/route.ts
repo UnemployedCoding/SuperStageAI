@@ -57,9 +57,10 @@ export async function POST(request: Request) {
           
           if (subErr) console.error("Supabase upsert error:", subErr);
 
-          // Grant credits to the user's profile
+          // Grant credits to the user's profile and save customer ID
           const { error: profErr } = await supabaseAdmin.from("profiles").update({
             credits_remaining: credits,
+            stripe_customer_id: session.customer as string,
           }).eq("id", userId);
           
           if (profErr) console.error("Supabase profile update error:", profErr);
